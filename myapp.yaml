@@ -1,0 +1,5618 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Petstore server.  You can find out more about    \ Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).    \  For this sample, you can use the api key `special-key` to test the authorization    \ filters."
+  version: "1.0.0"
+  title: "Swagger Petstore 2.0"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "apiteam@swagger.io"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+# host: "petstore.swagger.io"
+# basePath: "/v2"
+tags:
+- name: "pet"
+  description: "Everything about your Pets"
+  externalDocs:
+    description: "Find out more"
+    url: "http://swagger.io"
+- name: "store"
+  description: "Access to Petstore orders"
+- name: "user"
+  description: "Operations about user"
+  externalDocs:
+    description: "Find out more about our store"
+    url: "http://swagger.io"
+schemes:
+- "https"
+- "http"
+paths:
+  /pet:
+    post:
+      tags:
+      - "pet"
+      summary: "Add a new pet to the store"
+      description: ""
+      operationId: "addPet"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Pet object that needs to be added to the store"
+        required: true
+        schema:
+          $ref: "#/definitions/Apolice"
+      responses:
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+
+securityDefinitions:
+  petstore_auth:
+    type: "oauth2"
+    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:pets: "modify pets in your account"
+      read:pets: "read your pets"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+  Apolice:
+    type: object
+    required:
+      - numeroSucursal
+      - numeroApolice
+      - numeroEndosso
+      - sequenciaEndosso
+    properties:
+      sequenciaProcessoCarga:
+        type: integer
+        format: int32
+      numeroLote:
+        type: integer
+        format: int32
+      segurado:
+        $ref: '#/definitions/SeguradoApolice'
+      corretor:
+        $ref: '#/definitions/CorretorApolice'
+      tipoSeguro:
+        $ref: '#/definitions/TipoSeguroDominio'
+      apoliceAnterior:
+        $ref: '#/definitions/ApoliceAnterior'
+      dataCriacao:
+        type: string
+        format: date-time
+      codigoCanal:
+        description: "1- Corretor / 2 - Marcep"
+        type: integer
+        format: int32
+        default: 1        
+      canalOrigemCalculo:
+        $ref: '#/definitions/CanalOrigemCalculo'
+      codigoParceiroMultiCalculo:
+        description: "Minuto Corretora, Teleport"
+        type: integer
+        format: int32
+      numeroSucursal:
+        type: integer
+        format: int32
+      numeroApolice:
+        type: integer
+        format: int64
+      numeroEndosso:
+        type: integer
+        format: int64
+      dataEmissaoApolice:
+        type: string
+        format: date
+      ci:
+        description: Código de identificação da apólice
+        type: integer
+        format: int64
+      codigoTipoEndosso:
+        type: integer
+        format: int32
+      codigoSubTipoEndosso:
+        type: integer
+        format: int32
+      codigoSituacaoCartaoPorto:
+        type: integer
+        format: int32
+      codigoParceiroNegocio:
+        type: integer
+        format: int64
+        description: código do Co-branding salvo.
+      flagParceiroNegocioAtivo:
+        type: string
+        maxLength: 1
+        description: flag Co-branding salvo.
+      flagEnvioApoliceEmissao:
+        type: string
+        description: envio de apólice impressa ou digital. 'S' para digital e 'N' para impressa.
+      cocorretagem:
+        type: array
+        items:
+          $ref: '#/definitions/CocorretagemApolice'
+      tipoVigencia:
+        $ref: '#/definitions/TipoVigenciaDominio'
+      inicioVigencia:
+        type: string
+        format: date
+        description: data de inicio da vigência do orcamento de cotação.
+      fimVigencia:
+        type: string
+        format: date
+        description: data de fim da vigência do orcamento de cotação.
+      empresa:
+        $ref: '#/definitions/EmpresaDominio'
+      marca:
+        $ref: '#/definitions/MarcaDominio'
+      dataCalculo:
+        description: data de precificação.
+        type: string
+        format: date-time
+      itens:
+        type: array
+        items:
+          $ref: '#/definitions/ItemApolice'
+      formaPagamentoEscolhida:
+        $ref: '#/definitions/FormaPagamentoApolice'
+      formaPagamentoParcelaEscolhida:
+        $ref: '#/definitions/FormaPagamentoParcelaApolice'
+      meioPagamento:
+        $ref: '#/definitions/MeioPagamentoCotacaoApolice'
+      melhorDataPagamento:
+        type: string
+        format: date
+        description: data escolhida para melhor pagamento.
+      programasRelacionamento:
+        type: array
+        items:
+          $ref: '#/definitions/ProgramaRelacionamentoApolice'
+      flagWorksite:
+        type: string
+      flagWorksiteConcorrencia:
+        type: string
+      codigoEmpresaWorksite:
+        type: "integer"
+        format: "int64"
+      cnpjEmpresaWorksite:
+        type: "integer"
+        format: "int64"
+      codigoEmpresaWorksiteLegado:
+        type: "integer"
+        format: "int64"
+      flagApoliceCancelada:
+        type: string
+      premioLiquidoApolice:
+        type: number
+        format: double
+      premioTotalApolice:
+        type: number
+        format: double
+      flagPremioInformado:
+        type: string
+      flagIndividualTarget:
+        type: string
+      dataCarregamentoApoliceBase:
+        type: string
+        format: date
+      quantidadeItensApolice:
+        type: integer
+        format: int32
+      sequenciaEndosso:
+        type: integer
+        format: int32
+      codigoRamo:
+        type: integer
+        format: int32
+      condicaoComercialApolice:
+        $ref: '#/definitions/CondicaoComercialApolice'
+      criticas:
+        type: array
+        items:
+          $ref: '#/definitions/Critica'
+      devolutivas:
+        type: array
+        items:
+          $ref: '#/definitions/Devolutiva'
+      listaServicos:
+        type: "array"
+        items:
+          $ref: "#/definitions/ServicoConsulta"
+      etapaDocumentoSinapse:
+        $ref: '#/definitions/EtapaDocumentoSinapse'
+      codigoConvenio:
+        type: integer
+        format: int32
+      servicoSinistro:
+        $ref: '#/definitions/ServicoSinistro'
+      anoExercicioApolice:
+        type: string
+        format: date
+      codigoInternoAzul:
+        type: integer
+        format: int32
+      statusRollout:
+        $ref: '#/definitions/DominioApolice'
+      dataEnvioApolice:
+        description: data de envio da apolice sinapse sala e bi.
+        type: string
+      codigoMarca:
+        type: integer
+        format: int32
+      flagAzulEmissaoLinhaVerde:
+        description: flag que irá indicar se é uma EmissaoAzul dentro do Linha Verde
+        type: boolean
+        default: false
+      numeroApoliceEmitidaParceiro:
+        type: string
+      flagNovaEmissao:
+        description: flag que irá indicar se é uma Nova Emissao
+        type: boolean
+        default: false
+
+  ApoliceMensal:
+    type: object
+    properties:
+      codigoEmpresa:
+        type: integer
+        format: int32
+      numeroApolice:
+        type: integer
+        format: int64
+      codigoSucursal:
+        type: integer
+        format: int32
+      numeroEndosso:
+        type: integer
+        format: int64
+      numSeqEndosso:
+        type: integer
+        format: int32
+      codProdutoMarca:
+        type: integer
+        format: int32
+      dataInicioVigencia:
+        type: string
+        format: date
+      dataFimVidencia:
+        type: string
+        format: date
+      codSegmento:
+        type: integer
+        format: int32
+      codSusep:
+        type: integer
+        format: int32
+
+  Devolutiva:
+    type: object
+    properties:
+      codigo:
+        type: integer
+        format: int32
+      descricao:
+        type: string
+      texto:
+        type: string
+      tipo:
+        $ref: '#/definitions/DominioApolice'
+
+  ServicoConsulta:
+    type: "object"
+    properties:
+      codigoServico:
+        type: "integer"
+        format: "int64"
+      nomeServico:
+        type: "string"
+      retornoServico:
+        type: "array"
+        items:
+          $ref: "#/definitions/RetornoServico"
+
+  RetornoServico:
+    type: "object"
+    properties:
+      dominioTipoRetorno:
+        type: "string"
+      parametrosServico:
+        $ref: '#/definitions/ParametrosServicosConsulta'
+      conteudo:
+        type: "object"
+
+  EntradaMontaPayload:
+    type: object
+    properties:
+      empresa:
+        type: integer
+        format: int32
+      marca:
+        type: integer
+        format: int32
+      numeroSucursal:
+        type: integer
+        format: int32
+      numeroApolice:
+        type: integer
+        format: int64
+      numeroItem:
+        type: integer
+        format: int32
+      numeroLote:
+        type: integer
+        format: int32
+
+  ParametrosServicosConsulta:
+    type: "object"
+    properties:
+      numeroCpfCompleto:
+        type: "integer"
+        format: "int64"
+      numeroCnpjCompleto:
+        type: "integer"
+        format: "int64"
+      cepEnderecoCompleto:
+        type: "integer"
+        format: "int64"
+      cepPernoiteCompleto:
+        type: "integer"
+        format: "int64"
+      categoriaTarifaria:
+        type: "integer"
+        format: "int64"
+      numeroVP:
+        type: "integer"
+        format: "int64"
+      placa:
+        type: "string"
+      susepCorretor:
+        type: "string"
+      chassiCompleto:
+        type: "string"
+      dataCalculo:
+        type: "string"
+      dataNascimentoCondutor:
+        type: "string"
+      numeroCpfFilhoCompleto:
+        type: "integer"
+        format: "int64"
+      codigoLocalidade:
+        type: "integer"
+        format: "int64"
+      tipoSeguro:
+        type: "integer"
+        format: "int32"
+      sucursalApolice:
+        type: "integer"
+        format: "int32"
+      numeroApolice:
+        type: "integer"
+        format: "int64"
+      itemApolice:
+        type: "integer"
+        format: "int32"
+      dataInicioSinistro:
+        type: string
+        format: local-date
+      dataFimSinistro:
+        type: string
+        format: local-date
+      numeroApoliceAzul:
+        type: string
+
+  SeguradoApolice:
+    type: object
+    description: |
+      segurado.'
+      Obs.:Segurado é uma pessoa
+    properties:
+      pessoa:
+        $ref: '#/definitions/PessoaSeguradoApolice'
+
+  PessoaSeguradoApolice:
+    allOf:
+      - $ref: '#/definitions/PessoaApolice'
+      - type: object
+        description: objeto de pessoa com dados especificos para uso do segurado
+        properties:
+
+          codigoPessoa:
+            type: "integer"
+            format: "int32"
+          enderecos:
+            type: array
+            items:
+              $ref: '#/definitions/EnderecoApolice'
+          telefones:
+            type: array
+            items:
+              $ref: '#/definitions/TelefoneApolice'
+          enderecosEletronicos:
+            type: array
+            items:
+              $ref: '#/definitions/EnderecoEletronicoApolice'
+          dadosPessoaJuridica:
+            $ref: '#/definitions/DadoPessoaJuridicaApolice'
+          ocupacao:
+            $ref: '#/definitions/OcupacaoApolice'
+          tipoVinculoPep:
+            description: "identifica que a Pessoa é PEP ou relacionada a PEP"
+            type: "integer"
+            format: "int32"
+          flagSeguroCorretor:
+            description: "identifica se o seguro é do corretor"
+            type: "string"
+          pessoasPEP:
+            $ref: '#/definitions/ListaPEP'
+          paisNascimento:
+            $ref: "#/definitions/PaisNascimento"
+          paisResidencia:
+            $ref: "#/definitions/PaisResidencia"
+          faixaRendaMensal:
+            $ref: "#/definitions/FaixaRendaMensal"
+          relacionamentos:
+            type: "array"
+            items:
+              $ref: '#/definitions/RelacionamentoPessoaApolice'
+          codigoOperacao:
+            type: integer
+            format: int32
+
+  PessoaApolice:
+    type: object
+    properties:
+      codigo:
+        type: integer
+        format: int32
+      nomeLegalPessoa:
+        type: string
+        maxLength: 100
+      nomeSocialPessoa:
+        type: string
+        maxLength: 100
+      tipoPessoa:
+        $ref: '#/definitions/TipoPessoa'
+      estadoCivil:
+        $ref: '#/definitions/EstadoCivil'
+      sexo:
+        $ref: '#/definitions/Sexo'
+      dataNascimento:
+        type: string
+        format: date
+      documentos:
+        type: array
+        items:
+          $ref: '#/definitions/DocumentoApolice'
+      codigoAtividadeProfissional:
+        type: integer
+        format: int32
+
+  TipoPessoa:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      tipo de pessoa (domínio externo)
+      Ex.:Física, Jurídica        
+
+  DominioApolice:
+    required:
+      - codigo
+    description: domínios genérico
+    type: object
+    properties:
+      codigo:
+        description: código do domínio
+        type: integer
+        format: int32
+        default: 0
+      descricaoReduzida:
+        description: descrição reduzida do domínio, usada para abreviaturas, siglas etc
+        type: string
+      descricao:
+        description: descrição do domínio
+        type: string
+
+
+  EnderecoApolice:
+    type: "object"
+    required:
+      - codigoLogradouro
+    properties:
+      codigoLogradouro:
+        description: código do logradouro (obtido via integração com guia postal)
+        type: "integer"
+        format: "int64"
+      numeroCep:
+        description: número do CEP Ex.:Dado um CEP completo 12345-789. o número é 12345
+        type: "string"
+      numeroCepComplemento:
+        description: numero de complemento do CEP Ex.:Dado um CEP completo 12345-789. o complemento ? 789
+        type: string
+      tipoFinalidade:
+        $ref: '#/definitions/TipoFinalidadeEndereco'
+      tipoLogradouro:
+        $ref: "#/definitions/TipoLogradouro"
+      logradouro:
+        description: descrição do logradouro (obtido via integração com guia postal) Ex.:Paulista
+        type: string
+      numeroImovelLogradouro:
+        type: "string"
+      flagImovelSemNumero:
+        description: identifica que o imóvel não tem número
+        type: "boolean"
+      descricaoComplementoEndereco:
+        type: "string"
+      bairro:
+        $ref: "#/definitions/BairroApolice"
+      unidadeFederacao:
+        $ref: "#/definitions/UnidadeFederacaoApolice"
+      flagEndCorrespondencia:
+        description: 'Campo que ira armazenar a indicacao se este endereco e de envio de correspondencia S - Sim N - Nao'
+        type: "boolean"
+      localidade:
+        description: "Objeto que identifica a cidade do endereco"
+        $ref: '#/definitions/Localidade'
+
+  Localidade:
+    type: "object"
+    properties:
+      codigoLocalidade:
+        type: integer
+        format: int64
+      nomeLocalidade:
+        type: string
+      nomeAbreviadoLocalidade:
+        type: string
+      tipoLocalidade:
+        $ref: '#/definitions/DominioApolice'
+      tipoSituacaoLocalidade:
+        $ref: '#/definitions/TipoSituacaoLocalidade'
+
+  TipoSituacaoLocalidade:
+    type: "object"
+    properties:
+      codigoTipoSituacaoLocalidade:
+        type: integer
+        format: int64
+      descricaoTipoSituacaoLocalidade:
+        type: string
+
+  TipoFinalidadeEndereco:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      tipo de finalidade do endereço
+
+  TipoLogradouro:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      tipo de logradouro do endereço      
+
+  BairroApolice:
+    type: object
+    properties:
+      nomeBairro:
+        type: string
+
+  UnidadeFederacaoApolice:
+    type: object
+    properties:
+      codigoUnidadeFederacao:
+        type: string
+        minLength: 1
+        maxLength: 2
+      siglaUnidadeFederacao:
+        type: string
+
+  TelefoneApolice:
+    type: object
+    required:
+      - tipoFinalidade
+    properties:
+      tipoFinalidade:
+        $ref: '#/definitions/TipoFinalidadeTelefone'
+      ddd:
+        type: integer
+        format: int32
+      numero:
+        type: integer
+        format: int64
+      ramal:
+        type: integer
+        format: int32
+
+  TipoFinalidadeTelefone:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      tipo de finalidade do telefone        
+
+  EnderecoEletronicoApolice:
+    type: object
+    properties:
+      texto:
+        type: string
+        format: email
+
+  DadoPessoaJuridicaApolice:
+    type: "object"
+    properties:
+      cadatrosNacionalAtividadeEmpresa:
+        type: array
+        items:
+          $ref: "#/definitions/CadatroNacionalAtividadeEmpresaApolice"
+      naturezaJuridica:
+        $ref: "#/definitions/NaturezaJuridicaApolice"
+      codigoPatrimonioLiquido:
+        type: "integer"
+        format: "int32"
+      codigoReceitaOperacional:
+        type: "integer"
+        format: "int32"
+
+  CadatroNacionalAtividadeEmpresaApolice:
+    type: "object"
+    properties:
+      codigoAtividadeEmpresa:
+        type: "integer"
+        format: "int32"
+      atividadePrincipal:
+        type: "boolean"
+
+  NaturezaJuridicaApolice:
+    type: "object"
+    properties:
+      codigoNaturezaJuridica:
+        type: "integer"
+        format: "int32"
+
+  OcupacaoApolice:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      codigo de ocupacoes (dominio corporativo)                        
+
+  ListaPEP:
+    type: "object"
+    description: "Lista de Pessoas Politicamente Expostas relacionadas com a Pessoa"
+    properties:
+      pessoasPEP:
+        type: "array"
+        items:
+          $ref: '#/definitions/PessoaRelacao'
+
+  PessoaRelacao:
+    type: "object"
+    description: "Pessoas Politicamente Expostas relacionada com a Pessoa"
+    properties:
+      grauParentesco:
+        type: "object"
+        $ref: '#/definitions/DominioApolice'
+      cpfPessoaRelacionamento:
+        type: "integer"
+        format: "int32"
+      digitoCpfPessoaRelacionamento:
+        type: "integer"
+        format: "int32"
+      nomePessoaRelacionamento:
+        type: "string"
+
+  PaisNascimento:
+    allOf:
+      - $ref: '#/definitions/Pais'
+    description: |
+      codigo de país de nascimento (dominio corporativo)
+
+  Pais:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      codigo de país (dominio corporativo)
+
+  PaisResidencia:
+    allOf:
+      - $ref: '#/definitions/Pais'
+    description: |
+      codigo de país de residencia (dominio corporativo)      
+
+  FaixaRendaMensal:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      faixa de renda mensal      
+
+  RelacionamentoPessoaApolice:
+    type: object
+    properties:
+      relacionado:
+        $ref: "#/definitions/PessoaRelacionamentoApolice"
+      codigoTipoVinculo:
+        description: "código de vínculo entre o representante e o segurado PJ. Diretor, Analista etc"
+        type: "integer"
+        format: "int32"
+
+  PessoaRelacionamentoApolice:
+    allOf:
+      - $ref: '#/definitions/PessoaApolice'
+      - type: object
+        description: objeto de pessoa com dados especificos para uso do segurado
+        properties:
+          codigoMotivoSemCpfCnpj:
+            description: "Código Dominio do Motivo da Pessoa Não informar CPF/CNPJ"
+            type: "integer"
+            format: "int32"
+          tipoVinculoPep:
+            description: "identifica que a Pessoa é PEP ou relacionada a PEP"
+            type: "integer"
+            format: "int32"
+          pessoasPEP:
+            $ref: '#/definitions/ListaPEP'
+
+  CorretorApolice:
+    type: object
+    required:
+      - susep
+    properties:
+      susep:
+        type: string
+      matriculaFuncionarioWorksite:
+        type: string
+
+  TipoSeguroDominio:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: tipo de seguro (dominio admiistrativo) Seguro Novo (0), Apolice Genérico (3), Renovação Congênere(6)
+
+  CanalOrigemCalculo:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      canal de origem do calculo (domínio administrativo) Cotador (1), Canal Venda Online (2), Parceiros (3)'
+
+  CocorretagemApolice:
+    type: object
+    required:
+      - susep
+      - flagLider
+    properties:
+      susep:
+        type: string
+        maxLength: 6
+      flagLider:
+        type: string
+        enum: [S, N]
+      percentual:
+        type: number
+        format: float
+        minimum: 0
+        exclusiveMinimum: true
+        maximum: 100
+        exclusiveMaximum: true
+      condicaoComercialApolice:
+        $ref: '#/definitions/CondicaoComercialApolice'
+
+
+  TipoVigenciaDominio:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      tipo de vigência
+      Ex.:1 Seguro Mensal, 6 Seguro Semestral, 12 Seguro Anual, 24 Seguro Plurianual        
+
+  EmpresaDominio:
+    required:
+      - codigo
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      empresa
+
+  RetornoEmpresa:
+    type: object
+    properties:
+      empresas:
+        type: array
+        items:
+          $ref: '#/definitions/EmpresaDominio'
+      marcas:
+        type: array
+        items:
+          $ref: '#/definitions/EmpresaDominio'
+
+  ItemApolice:
+    type: object
+    required:
+      - numeroItem
+    properties:
+      numeroItem:
+        description: número de identificação do item do orçamento
+        type: integer
+        format: int32
+      codigoIRBSeguradora:
+        description: código relacionado a congeneren de outras seguradoras
+        type: integer
+        format: int32
+      flagRenovacaoOutraSeguradora:
+        description: define se é renovação congenere ou não, opções de resposta S ou N
+        type: string
+        default: "N"
+      nomeBeneficiario:
+        type: string
+      codigoModalidade:
+        type: integer
+        format: int32
+      dataEnquadramento:
+        type: string
+        format: date
+        description: data de inicio da vigência do orcamento de cotação.
+      dataEnquadramentoApolice:
+        type: string
+        format: date
+        description: data de enquadramento do Apolice.
+      veiculo:
+        $ref: '#/definitions/VeiculoApolice'
+      condutores:
+        type: array
+        items:
+          $ref: '#/definitions/CondutorApolice'
+      coberturas:
+        type: array
+        items:
+          $ref: '#/definitions/CoberturaCotacaoApolice'
+      servicos:
+        type: array
+        items:
+          $ref: '#/definitions/ServicoCotacaoApolice'
+      beneficios:
+        type: array
+        items:
+          $ref: '#/definitions/BeneficioCotacaoApolice'
+      produtoComercial:
+        $ref: '#/definitions/ProdutoComercialApolice'
+      produtosComerciaisSinapse:
+        type: array
+        items:
+          $ref: '#/definitions/ProdutoComercialApolice'
+      questoes:
+        type: array
+        items:
+          $ref: '#/definitions/QuestaoApolice'
+      descontos:
+        type: array
+        items:
+          $ref: '#/definitions/DescontoApolice'
+      rastreador:
+        $ref: '#/definitions/RastreadorApolice'
+      classeLocalizacao:
+        type: integer
+        format: int32
+      apoliceBonus:
+        $ref: "#/definitions/ApoliceBonusApolice"
+      flagItemCancelado:
+        type: string
+      codigoSegmentoApolice:
+        type: integer
+        format: int32
+      criticas:
+        type: array
+        items:
+          $ref: '#/definitions/Critica'
+      devolutivas:
+        type: array
+        items:
+          $ref: '#/definitions/Devolutiva'
+      ci:
+        description: Código de identificação da apólice
+        type: integer
+        format: int64
+      codigoDiferencaBonus:  
+        type: integer
+        format: int32
+      codigoPersonaRiscoRestrito:
+        type: integer
+        format: int32
+        
+  VeiculoApolice:
+    type: object
+    properties:
+      codigoModeloVersaoVeiculo:
+        type: integer
+        format: int32
+      nomeVersaoVeiculo:
+        type: string
+      placa:
+        type: string
+      cepPernoite:
+        type: string
+      codigoLogradouro:
+        type: integer
+        format: int64
+      anoFabricacaoVeiculo:
+        type: integer
+        format: int32
+      anoModeloVeiculo:
+        type: integer
+        format: int32
+      flagZeroKm:
+        description: "flag que identifica se o veículo é 0km"
+        type: "string"
+      tipoKitGas:
+        $ref: '#/definitions/TipoKitGas'
+      flagChassiRemarcado:
+        type: boolean
+      flagVistoriaPrevia:
+        type: boolean
+      numeroVistoria:
+        type: integer
+        format: int64
+      tipoCambio:
+        $ref: '#/definitions/TipoCambio'
+      flagCambioAutomaticoAdaptado:
+        type: boolean
+      blindagem:
+        $ref: '#/definitions/DominioApolice'
+        description: "1 - de fabrica, 2 - não possui, 3 - adpatado/instalado"
+      tipoCombustivel:
+        description: "define o tipo de combustível do automóvel, por exemplo gasolina, alcool"
+        $ref: "#/definitions/DominioType"
+      quantidadePassageiros:
+        description: Este é no caso que o carro é transformado e o usuário necessita informar a quantidade de passageiros total após a alteração do veículo dele
+        type: integer
+        format: int32
+      quantidadePortas:
+        type: integer
+        format: int32
+      tipoUso:
+        $ref: '#/definitions/TipoUso'
+      valorBase:
+        description: valor monetário do veículo quando não for possivel obter sua cotação do cadastro de veículos.
+        type: number
+        format: double
+      variacaoOpcionais:
+        description: percentual de variação em relação ao valor base do veículo quando houve opcionais no veículo.
+        type: number
+        format: double
+      financiado:
+        $ref: '#/definitions/Financiado'
+      chassiRemarcado:
+        $ref: '#/definitions/ChassiRemarcado'
+      flagBlindagem:
+        type: boolean
+        description: "flag que identifica se tem blindagem"
+      tipoIsencao:
+        $ref: '#/definitions/TipoIsencao'
+      classeBonus:
+        description: classe de bônus que pode variar de 1 a 10
+        type: integer
+        format: int32
+        minimum: 0
+        maximum: 10
+      chassi:
+        type: string
+      renavam:
+        type: string
+      modalidade:
+        $ref: '#/definitions/TipoModalidadeCasco'
+      notaFiscal:
+        type: string
+      dataEmissaoNota:
+        type: string
+        format: date
+      dataCoberturaVistoria:
+        type: string
+        format: date
+      coberturaProvisoriaNumero:
+        type: "string"
+      dataSaidaConcessionaria:
+        type: string
+        format: date
+      flagVeiculoPcd:
+        description: "Determina se veiculo é habilitado por pessoa Deficiente/Necessidade especial"
+        type: boolean
+      nomeBeneficiario:
+        type: string
+      categoriaTarifaria:
+        description: categoria reenquadrada a partir do tipo de uso
+        type: integer
+        format: int32
+      percValorDepreciacao:
+        type: number
+        format: double
+      percValorMercado:
+        type: number
+        format: double
+      valorDepreciado:
+        type: "number"
+        format: "double"
+        description: "Valor calculado de depreciação"
+      cadastroVeiculo:
+        $ref: '#/definitions/ValorMercadoVeiculoType'
+      codigoTipoVistoria:
+        description: codigo tipo vistoria # 1 - normal # 2 - simplificada
+        type: integer
+        format: int32
+      valorBaseAtual:
+        description: valor monetário do veículo atual
+        type: number
+        format: double
+      dataReferenciaValorBaseAtual:
+        description: valor monetário do veículo atual
+        type: string
+        format: date
+
+  TipoKitGas:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      tipo de kit Gas
+        1 Kit-Gás de Série
+        2 Sem Kit-Gás
+        3 Kit-Gás - Transformado              
+
+  TipoCambio:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      tipo de cambio
+      cambio é manual, automático ou diferenciado
+
+  TipoUso:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      tipos de uso do veículo (domínio externo)
+      Ex.:Particular, Táxi etc      
+
+  Financiado:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      condição de financiamento do veículo
+        -2  Não perguntado
+        -1  Não informado
+         1  Sim
+         2  Não
+        -3  Não consultado
+
+  ChassiRemarcado:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      chassi é remarcado?
+         1 Sim
+         2 Não              
+
+  TipoIsencao:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      tipo de isenção de impostos sobre o veículo.
+        0 Sem Isenção
+        1 ICMS
+        2 IPI
+        3 ICMS e IPI      
+
+  TipoModalidadeCasco:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      tipo de modalidade do casco
+      1 - Valor de mercado referenciado
+      2 - Valor determinado
+
+  ValorMercadoVeiculoType:
+    description: |
+      description: "Objeto de composição do valor do veículo conforme a tabela FIPE"
+    type: "object"
+    properties:
+      codigoVersao:
+        description: ""
+        type: "integer"
+        format: "int64"
+      anoModelo:
+        description: ""
+        type: "integer"
+        format: "int32"
+      flagZeroKm:
+        description: "flag que identifica se o veículo é 0km"
+        type: "string"
+      valorMercado:
+        type: "number"
+        format: "double"
+      anoTarifa:
+        description: ""
+        type: "integer"
+        format: "int32"
+      mesTarifa:
+        description: ""
+        type: "integer"
+        format: "int32"
+      dataEnquadramento:
+        type: string
+        description: "dataEnquadramento"
+      versaoVeiculo:
+        $ref: "#/definitions/VersaoVeiculoType"
+      tipoTabelaReferencia:
+        $ref: "#/definitions/DominioType"
+
+  VersaoVeiculoType:
+    description: "define as versões de um veículo, por meio das possíveis chaves, como ano modelo, tipo combustível dentre outro"
+    type: "object"
+    properties:
+      codigoVersao:
+        description: "numero sequencial que representa o código Porto na plataforma do auto 2.0"
+        type: integer
+        format: int64
+      versaoLegado:
+        $ref: "#/definitions/VersaoVeiculoLegado"
+      relVersaoCodigosReferencia:
+        description: "representação da associação entre o código de versão do Auto 2.0 (código porto novo) e os códigos das tabelas de referencia"
+        type: array
+        items:
+          $ref: "#/definitions/RelVersaoCodigoReferencia"
+      nomeVersao:
+        description: ""
+        type: "string"
+      nomeAbreviadoVersao:
+        description: ""
+        type: "string"
+      nomeComplementar:
+        description: ""
+        type: "string"
+      codigoFipe:
+        description: ""
+        type: "integer"
+        format: "int64"
+      quantidadePortas:
+        type: "integer"
+        format: "int32"
+      quantidadePotencia:
+        description: ""
+        type: "integer"
+        format: "int32"
+      quantidadeCilindrada:
+        description: ""
+        type: "integer"
+        format: "int32"
+      quantidadePeso:
+        description: ""
+        type: "integer"
+        format: "int32"
+      quantidadeComprimento:
+        description: ""
+        type: "integer"
+        format: "int32"
+      quantidadeLargura:
+        description: ""
+        type: "integer"
+        format: "int32"
+      quantidadePassageiros:
+        description: ""
+        type: "integer"
+        format: "int32"
+      quantidadeAltura:
+        description: ""
+        type: "integer"
+        format: "int32"
+      quantidadeValvula:
+        description: ""
+        type: "integer"
+        format: "int32"
+      flagVeiculoPCD:
+        type: "string"
+      flagVeiculoBlindado:
+        type: "string"
+      flagSituacao:
+        description: "Determina se o grupo de linha está ou não ativa"
+        type: "string"
+      flagImportacaoIndependente:
+        description: ""
+        type: "string"
+      flagVeiculoTransformado:
+        description: ""
+        type: "string"
+      flagTerceiroEixo:
+        description: ""
+        type: "string"
+      flagPossuiDaf:
+        description: ""
+        type: "string"
+      codigoGrupoLinha:
+        description: ""
+        type: "integer"
+        format: "int32 "
+      codigoLinha:
+        description: ""
+        type: "integer"
+        format: "int32 "
+      codigoLinhaLegado:
+        type: integer
+        format: int32
+        description: "codigo de identificao da linha do veiculo. Esta informacao sera obtida atraves carga do CADAUTO do legado (informix), e se faz necessaria para manter a associacao entre as linhas da nova plataforma com as linhas do legado."
+      flagveiculoValorDeterminado:
+        type: "string"
+      dataUltimaAlteracao:
+        type: "string"
+        format: "date"
+      codigoTipoUsuarioUltimaAlteracao:
+        description: "codigo tipo usuario ultima alteracao"
+        type: "string"
+      codigoEmpresaUsuarioUltimaAlteracao:
+        description: "codigo empresa usuario ultima Alteracao"
+        type: "integer"
+        format: "int64"
+      codigoMatriculaUsuarioUltimaAlteracao:
+        description: "codigo Matricula Usuario Ultima Alteracao"
+        type: "integer"
+        format: "int64"
+      modelo:
+        $ref: "#/definitions/ModeloVeiculoType"
+      tipoCombustivel:
+        description: "define o tipo de combustível do automóvel, por exemplo gasolina, alcool"
+        $ref: "#/definitions/DominioType"
+      tipoCambio:
+        description: "Tipo do câmbio utilizado pelo veículo, sendo Manual, Automático entre outros"
+        $ref: "#/definitions/DominioType"
+      categoriaTarifariaOriginal:
+        description: "categoria tarifária a qual identifica um veiculo, por exmeplo catagoria 10 - GOL 1.0 Gasolina Manual"
+        $ref: "#/definitions/DominioType"
+      procedencia:
+        description: "País de origem veículo, sendo (Nacional ou Importado)"
+        $ref: "#/definitions/DominioType"
+      tipoAlimentacaoCombustivel:
+        description: "Tipo de alimentacao, por exemplo, injeção eletrônica"
+        $ref: "#/definitions/DominioType"
+      estilo:
+        description: "O estilo de veículo informa se o veículo é esportivo, popular, off Road"
+        $ref: "#/definitions/DominioType"
+      tipoTracao:
+        description: "Tipo de tração veículo, sendo: 4x2, 4x4"
+        $ref: "#/definitions/DominioType"
+      porte:
+        description: "Dependencia do objeto que define o porte do veículo"
+        $ref: "#/definitions/PorteVeiculoType"
+      grupoTarifario:
+        description: "Domínio de grupo tárifário, por exemplo: Veículos Recém Lançados"
+        $ref: "#/definitions/DominioType"
+      franquia:
+        type: 'array'
+        items:
+          $ref: '#/definitions/FranquiaType'
+
+  DominioType:
+    description: "domínios externos ao modelo de cotação (Veículo)"
+    type: "object"
+    properties:
+      codigoConfiguracao:
+        description: "código de configuração da tabela de domínio"
+        type: "integer"
+        format: "int32"
+      codigo:
+        description: "código do valor do domínio"
+        type: "integer"
+        format: "int32"
+      nomeDominio:
+        description: ""
+        type: "string"
+      nomeAbreviadoDominio:
+        description: ""
+        type: "string"
+      flagSituacao:
+        description: "Determina se o grupo de linha está ou não ativa"
+        type: "string"
+      dataUltimaAlteracao:
+        type: "string"
+        format: "date"
+      codigoTipoUsuarioUltimaAlteracao:
+        description: "codigo tipo usuario ultima alteracao"
+        type: "string"
+      codigoEmpresaUsuarioUltimaAlteracao:
+        description: "codigo empresa usuario ultima Alteracao"
+        type: "integer"
+        format: "int64"
+      codigoMatriculaUsuarioUltimaAlteracao:
+        description: "codigo Matricula Usuario Ultima Alteracao"
+        type: integer
+        format: int64
+
+  VersaoVeiculoLegado:
+    type: object
+    properties:
+      codigoVersaoLegado:
+        description: "numero proveniente do legado que representa o código Porto no Informix"
+        type: integer
+        format: int64
+      tipoVeiculo:
+        type: integer
+        format: int64
+      marca:
+        type: integer
+        format: int64
+      codigoVersao:
+        description: "numero sequencial controlado pela base de dados que representa o código Porto na plataforma do auto 2.0 (relacionamento bidirecional)"
+        type: integer
+        format: int64
+
+  RelVersaoCodigoReferencia:
+    #representa o registro de associacao entre a versão de veículo e o(s) código(s) das tabelas de referencia (Fipe/Molicar/etc)
+    type: object
+    description: "representa a associação entre o código Porto e o código de referencia de acordo com sua tabela de referencia"
+    properties:
+      numeroSequencialAssociacao:
+        description: "numero sequencial controlado pelo banco que representa a relacao entre código porto e tabela+codigo de referencia"
+        type: integer
+        format: int64
+      tipoTabelaReferencia:
+        $ref: "#/definitions/DominioType"
+      codigoReferencia:
+        description: "código associado à tabela de referência correspondente (código Fipe, código Molicar, etc)"
+        type: integer
+        format: int64
+      codigoVersao:
+        description: "numero sequencial que representa o código Porto na plataforma do auto 2.0 (relacionamento bidirecional)"
+        type: integer
+        format: int64
+
+  ModeloVeiculoType:
+    description: "Objeto que define o modelo do veículo, por exmeplo GOL, CIVIC, CITY"
+    type: "object"
+    properties:
+      codigoModelo:
+        description: "numero que representa o código do modelo do veículo na plataforma do auto 2.0"
+        type: integer
+        format: int64
+      modeloLegado:
+        $ref: "#/definitions/ModeloVeiculoLegado"
+      nomeModelo:
+        description: ""
+        type: "string"
+      nomeComplementarModelo:
+        description: ""
+        type: "string"
+      marca:
+        description: "Define a marca do veículo, Honda, Chevrolet entre outras. As informações de marca será disponibilizada por serviço no corporativo"
+        $ref: "#/definitions/DominioApolice"
+      tipoCarroceria:
+        description: "define o tipo de carroceria do veículo, sendo (hatch, sedan)"
+        $ref: "#/definitions/DominioType"
+      especie:
+        description: "define a espécie do veículo, sendo Automóvel, Bicicleta, Moto entre outros"
+        $ref: "#/definitions/DominioType"
+
+  ModeloVeiculoLegado:
+    type: object
+    properties:
+      tipoVeiculo:
+        description: "numero proveniente do legado que representa o código do modelo do veículo no legado"
+        type: integer
+        format: int64
+      marca:
+        description: "numero proveniente do legado que representa a marca do veículo no legado"
+        type: integer
+        format: int64
+      codigoModelo:
+        description: "número sequencial controlado pela base de dados que representa o código do modelo do veículo na plataforma do auto 2.0 (relacionamento bidirecional)"
+        type: integer
+        format: int64
+
+  PorteVeiculoType:
+    description: "Objeto que define um Porte de veículo. Normalmente o porte utilizado para caminhões é medido em cc cavalos"
+    type: "object"
+    properties:
+      codigoPorte:
+        description: ""
+        type: "integer"
+        format: "int64"
+      nomePorte:
+        description: ""
+        type: "string"
+      quantidadePotenciaInicialMotor:
+        description: ""
+        type: "integer"
+        format: "int64"
+      quantidadePotenciaFinalMotor:
+        description: ""
+        type: "integer"
+        format: "int64"
+      dataUltimaAlteracao:
+        type: "string"
+        format: "date"
+      codigoTipoUsuarioUltimaAlteracao:
+        type: "string"
+      codigoEmpresaUsuarioUltimaAlteracao:
+        type: "integer"
+        format: "int64"
+      codigoMatriculaUsuarioUltimaAlteracao:
+        type: "integer"
+        format: "int64"
+
+  FranquiaType:
+    description: "Objeto que define o valor de franquias para as peças do veículo conforme o tipo franquia."
+    type: "object"
+    properties:
+      codigoFranquia:
+        description: ""
+        type: "integer"
+        format: "int64"
+      tipoFranquia:
+        description: "define o tipo de franquia do veículo, por exemplo, Casco ou Vidros"
+        $ref: "#/definitions/DominioType"
+      percentualFranquia:
+        description: ""
+        type: "number"
+        format: "double"
+      valorFranquia:
+        description: ""
+        type: "number"
+        format: "double"
+      valorFranquiaMinima:
+        description: ""
+        type: "number"
+        format: "double"
+      valorDescontoFranquia:
+        type: "integer"
+        format: "int64"
+      dataUltimaAlteracao:
+        type: "string"
+        format: "date"
+      codigoTipoUsuarioUltimaAlteracao:
+        type: "string"
+      codigoEmpresaUsuarioUltimaAlteracao:
+        type: "integer"
+        format: "int64"
+      codigoMatriculaUsuarioUltimaAlteracao:
+        type: "integer"
+        format: "int64"
+
+  CondutorApolice:
+    type: object
+    description: |
+      condutor do veículo.
+      Obs.:Condutor é uma pessoa
+    properties:
+      pessoa:
+        $ref: '#/definitions/PessoaCondutorApolice'
+
+  PessoaCondutorApolice:
+    allOf:
+      - $ref: '#/definitions/PessoaApolice'
+      - type: object
+        description: objeto de pessoa com dados especificos para uso do segurado
+
+  CoberturaCotacaoApolice:
+    type: object
+    properties:
+      codigoCobertura:
+        type: number
+      valorImportanciaSegurada:
+        type: number
+        format: double
+        default: 0.0
+      valorPremioAnual:
+        description: valor do prêmio anualizado, sem os descontos comerciais. Deve ser persistido para fins de Apolices e renovações.
+        type: number
+        format: double
+        default: 0.0
+      valorPremio:
+        description: valor do prêmio da cobertura.
+        type: number
+        format: double
+        default: 0.0
+      questoes:
+        type: array
+        items:
+          $ref: '#/definitions/QuestaoApolice'
+      franquiasEscolhidas:
+        type: array
+        items:
+          $ref: '#/definitions/FranquiaCoberturaApolice'
+      acessoriosContratados:
+        type: array
+        items:
+          $ref: '#/definitions/AcessorioApolice'
+
+  QuestaoApolice:
+    type: object
+    description: questão.
+    properties:
+      codigoFormulario:
+        type: integer
+        format: int32
+      codigo:
+        type: integer
+        format: int64
+      respostas:
+        type: array
+        items:
+          $ref: '#/definitions/RespostaQuestionarioApolice'
+
+  RespostaQuestionarioApolice:
+    type: object
+    required:
+      - codigo
+    description: |
+      alguns parametros que precisam ser passados para o sinapse dependem da correspondência da pergunta cadastrada no questionário do parametrizador com a resposta informada
+      Ex.:tipoResidencia, distanciaResidenciaTrabalho, garagem, utilizacaoVeiculo
+    properties:
+      codigo:
+        type: integer
+        format: int64
+      resposta:
+        type: string
+
+  FranquiaCoberturaApolice:
+    type: object
+    required:
+      - codigoFranquia
+    properties:
+      codigoFranquia:
+        type: integer
+        format: int32
+      valorFranquia:
+        type: "number"
+        format: "double"
+
+  FranquiaCoberturaApoliceHistorico:
+    type: object
+    required:
+      - codigoFranquia
+    properties:
+      codigoFranquia:
+        type: integer
+        format: int32
+      valorFranquia:
+        type: "number"
+        format: "double"
+      nomeFranquia:
+        type: string
+
+  AcessorioApolice:
+    type: object
+    required:
+      - codigoAcessorio
+    properties:
+      codigoAcessorio:
+        type: integer
+        format: int64
+      tipoAcessorio:
+        type: integer
+        format: int32
+      descricaoAcessorio:
+        type: string
+      valorImportanciaSegurada:
+        description: "valor da importancia segurada informada pelo corretor."
+        type: number
+        format: double
+        default: 0.0
+      valorFranquia:
+        description: "valor da franquia do acessorio contratado atribuido pelo sinapse"
+        type: "number"
+        format: "double"
+        default: 0.0
+      valorPremio:
+        description: "valor do prêmio do acessorio contratado atribuido pelo sinapse"
+        type: "number"
+        format: "double"
+        default: 0.0
+  ServicoCotacaoApolice:
+    type: object
+    required:
+      - codigoPlanoServico
+    properties:
+      codigoPlanoServico:
+        type: number
+      valorPremioAnual:
+        description: valor do prêmio anualizado, sem os descontos comerciais. Usado para fins de Apolices e renovações.
+        type: number
+        format: double
+        default: 0.0
+      valorPremio:
+        description: valor do prêmio do serviço.
+        type: number
+        format: double
+        default: 0.0
+      valorPremioCartaoPorto:
+        description: valor do prêmio do serviço.
+        type: number
+        format: double
+        default: 0.0
+      valorPremioAnualCartaoPorto:
+        description: valor do prêmio do serviço.
+        type: number
+        format: double
+        default: 0.0
+      valorDescontoCartaoPorto:
+        description: valor do prêmio do serviço.
+        type: number
+        format: double
+        default: 0.0
+      valorDescontoAnualCartaoPorto:
+        description: valor do prêmio do serviço.
+        type: number
+        format: double
+        default: 0.0
+      questoes:
+        type: "array"
+        items:
+          $ref: "#/definitions/QuestaoApolice"
+      flagCobravel:
+        type: boolean
+
+  BeneficioCotacaoApolice:
+    type: object
+    required:
+      - codigoBeneficio
+    properties:
+      codigoBeneficio:
+        type: number
+      questoes:
+        type: array
+        items:
+          $ref: '#/definitions/QuestaoApolice'
+
+  ProdutoComercialApolice:
+    type: "object"
+    description: Produto Comercial do Item (definido pelo Sinapse e Oferta)
+    properties:
+      segmento:
+        $ref: "#/definitions/SegmentoApolice"
+      codigoProdutoTecnico:
+        type: "integer"
+        format: "int32"
+      codigoProdutoComercial:
+        type: "integer"
+        format: "int32"
+      nomeProdutoComercial:
+        type: "string"
+      numeroVersaoProdutoComercial:
+        type: "number"
+      numeroSequenciaVersaoProdutoComercial:
+        type: "number"
+      numeroCpfFilho:
+        description: "número sem máscara. Zeros a esquerda devem ser discriminados. Ex.: Cpf: 01234567890"
+        type: string
+
+  SituacaoServico:
+    type: "object"
+    properties:
+      codigo:
+        type: "integer"
+        format: "int32"
+      nome:
+        type: "string"
+      codigoSituacao:
+        type: "integer"
+        format: "int32"
+      mensagem:
+        type: "string"
+
+  Vigencia:
+    type: "object"
+    properties:
+      codigo:
+        type: "integer"
+        format: "int32"
+      nome:
+        type: "string"
+      valor:
+        type: "array"
+        items:
+          type: "integer"
+          format: "int32"
+      classificacao:
+        $ref: "#/definitions/DominioApolice"
+      tipoAbrangencia:
+        type: "integer"
+        format: "int32"
+
+
+  SegmentoApolice:
+    type: "object"
+    properties:
+      codigoSegmento:
+        type: "number"
+      versaoSegmento:
+        type: "array"
+        items:
+          $ref: "#/definitions/VersaoSegmentoEBO"
+      nomeSegmento:
+        type: "string"
+      nomeFantasia:
+        type: "string"
+      empresa:
+        $ref: '#/definitions/DominioApolice'
+      codigoMarca:
+        type: "integer"
+        format: "int32"
+      questionarios:
+        $ref: "#/definitions/ListaQuestionariosProdutoComercialEBO"
+      descontosAgravos:
+        type: "array"
+        items:
+          $ref: "#/definitions/DescontoAgravoSegmento"
+      beneficios:
+        type: "array"
+        items:
+          $ref: "#/definitions/BeneficioEBO"
+      servicos:
+        type: array
+        items:
+          $ref: "#/definitions/ServicoProdutoComercial"
+      coberturas:
+        type: "array"
+        items:
+          $ref: "#/definitions/CoberturaEBO"
+      ofertasCruzadas:
+        type: "array"
+        items:
+          $ref: "#/definitions/OfertaCruzadaSegmento"
+      cobranding:
+        $ref: '#/definitions/Cobranding'
+      programaRelacionamentos:
+        type: "array"
+        items:
+          $ref: '#/definitions/ProgramaRelacionamento'
+      ramo:
+        type: "integer"
+        format: "int64"
+      modalidades:
+        type: "array"
+        items:
+          type: "integer"
+          format: "int32"
+      codigosTextos:
+        type: "array"
+        items:
+          type: "integer"
+          format: "int32"
+      vigencias:
+        type: "array"
+        items:
+          $ref: '#/definitions/Vigencia'
+      situacaoServicos:
+        type: "array"
+        items:
+          $ref: '#/definitions/SituacaoServico'
+      flexibilizacaoQuantidadeDias:
+        type: "integer"
+        format: "int32"
+      flexibilizacaoVigencia:
+        type: "array"
+        items:
+          $ref: '#/definitions/FlexibilizacaoVigencia'
+      flagElegivel:
+        type: "boolean"
+      worksite:
+        $ref: '#/definitions/Worksite'
+      dataEnquadramento:
+        type: "string"
+        format: "date"
+
+  TipoSelecaoEBO:
+    type: "object"
+    properties:
+      codigoTipoSelecao:
+        type: "integer"
+        format: "int32"
+      nomeTipoSelecao:
+        type: "string"
+
+  DependenciaDesconto:
+    type: "object"
+    properties:
+      tipoSelecao:
+        $ref: "#/definitions/TipoSelecaoEBO"
+      descontosAgravosDependecias:
+        type: "array"
+        items:
+          $ref: "#/definitions/DescontoAgravoSegmento"
+
+  FlexibilizacaoVigencia:
+    type: "object"
+    properties:
+      tipoAbrangencia:
+        type: "integer"
+        format: "int32"
+      quantidadeDiasRetroativo:
+        type: "integer"
+        format: "int32"
+      quantidadeDiasPosterior:
+        type: "integer"
+        format: "int32"
+
+  Worksite:
+    type: "object"
+    properties:
+      codigoSusep:
+        type: "string"
+      flagCorretorWorksite:
+        type: "boolean"
+      flagVigente:
+        type: "boolean"
+      flagFuncionario:
+        type: "boolean"
+      descontosWorsite:
+        type: "array"
+        items:
+          $ref: "#/definitions/DescontoAgravoSegmento"
+      empresas:
+        type: "array"
+        items:
+          type: "integer"
+          format: "int32"
+
+  ProgramaRelacionamento:
+    type: "object"
+    properties:
+      programa:
+        $ref: "#/definitions/DominioApolice"
+      tipoPrograma:
+        type: "integer"
+        format: "int32"
+      nomeTipoPrograma:
+        type: "string"
+      segmentoCorrentista:
+        type: "integer"
+        format: "int32"
+      pontosCliente:
+        type: "number"
+        format: "double"
+      flagPSPDormente:
+        type: "boolean"
+      faixas:
+        type: "array"
+        items:
+          $ref: "#/definitions/Faixa"
+      codigosTextos:
+        type: "array"
+        items:
+          type: "integer"
+          format: "int32"
+
+  Faixa:
+    type: "object"
+    properties:
+      codigoFaixa:
+        type: "integer"
+        format: "int32"
+      pontos:
+        type: "integer"
+        format: "int64"
+      valorPontos:
+        type: "number"
+        format: "double"
+      porto:
+        type: "number"
+        format: "double"
+      parceiro:
+        type: "number"
+        format: "double"
+      desconto:
+        type: "number"
+        format: "double"
+
+  Cobranding:
+    type: "object"
+    properties:
+      codigo:
+        type: "number"
+      descricao:
+        type: "string"
+      flagSobrescrever:
+        type: "string"
+        maxLength: 1
+      flagObrigatorio:
+        type: "string"
+        maxLength: 1
+      flagDefault:
+        type: "string"
+        maxLength: 1
+
+  OfertaCruzadaSegmento:
+    type: "object"
+    properties:
+      codigoOfertaCruzada:
+        type: "integer"
+        format: "int32"
+      nomeOfertaCruzada:
+        type: "string"
+      ordemExibicao:
+        type: "integer"
+        format: "int32"
+      codigosTextos:
+        type: "array"
+        items:
+          type: "integer"
+          format: "int32"
+
+  CoberturaEBO:
+    type: "object"
+    properties:
+      codigoCobertura:
+        type: "number"
+      tipoCobertura:
+        $ref: "#/definitions/TipoCoberturaEBO"
+      nomeCobertura:
+        type: "string"
+      modalidades:
+        type: "array"
+        items:
+          $ref: "#/definitions/Modalidade"
+      limiteMaximo:
+        type: "number"
+        format: "double"
+      limiteMinimo:
+        type: "number"
+        format: "double"
+      franquias:
+        type: "array"
+        items:
+          $ref: "#/definitions/FranquiaSimplificada"
+      coberturasDependencias:
+        type: "array"
+        items:
+          $ref: "#/definitions/CoberturaEBO"
+      flagObrigatorio:
+        type: "boolean"
+      ordemExibicao:
+        type: "integer"
+        format: "int32"
+      questionarios:
+        type: "array"
+        items:
+          $ref: "#/definitions/QuestionarioSimplificado"
+      intervalos:
+        type: "array"
+        items:
+          type: "number"
+          format: "double"
+      codigosTextos:
+        type: "array"
+        items:
+          type: "integer"
+          format: "int32"
+      tipoAbrangencia:
+        type: "integer"
+        format: "int32"
+      flagCobravel:
+        type: "boolean"
+      ramoContabil:
+        type: "integer"
+        format: "int32"
+      fipe:
+        $ref: "#/definitions/FipeEBO"
+
+  FipeEBO:
+    type: "object"
+    properties:
+      percentualMinimo:
+        type: "number"
+        format: "double"
+      percentualMaximo:
+        type: "number"
+        format: "double"
+      percentuaisVariacaoOpcional:
+        type: "array"
+        items:
+          type: "number"
+          format: "double"
+
+  FranquiaSimplificada:
+    type: "object"
+    properties:
+      codigoFranquia:
+        type: "integer"
+        format: "int32"
+      descricaoFranquia:
+        type: "string"
+      limiteMaximo:
+        type: "number"
+        format: "double"
+      limiteMinimo:
+        type: "number"
+        format: "double"
+      ordemExibicao:
+        type: "integer"
+        format: "int32"
+
+  Modalidade:
+    type: "object"
+    properties:
+      codigo:
+        type: "integer"
+        format: "int32"
+      descricao:
+        type: "string"
+      ordemExibicao:
+        type: "integer"
+        format: "int32"
+
+  TipoCoberturaEBO:
+    type: "object"
+    properties:
+      codigoTipoCobertura:
+        type: "integer"
+        format: "int32"
+      nomeTipoCobertura:
+        type: "string"
+
+  ServicoProdutoComercial:
+    type: "object"
+    properties:
+      tipoServico:
+        $ref: "#/definitions/TipoServico"
+      planoServicoEBO:
+        $ref: "#/definitions/PlanoServicoEBO"
+      coberturasDependencias:
+        type: "array"
+        items:
+          $ref: "#/definitions/CoberturaEBO"
+      ordemExibicao:
+        type: "integer"
+        format: "int32"
+      questionarios:
+        type: "array"
+        items:
+          $ref: "#/definitions/QuestionarioSimplificado"
+      codigosTextos:
+        type: "array"
+        items:
+          type: "integer"
+          format: "int32"
+      tipoAbrangencia:
+        type: "integer"
+        format: "int32"
+      flagCobravel:
+        type: "boolean"
+      ramoContabil:
+        type: "integer"
+        format: "int32"
+
+  QuestionarioSimplificado:
+    type: "object"
+    properties:
+      codigoQuestionario:
+        type: "integer"
+        format: "int32"
+      codigoTipoQuestionario:
+        type: "integer"
+        format: "int32"
+      ordem:
+        type: "integer"
+        format: "int32"
+      nomeQuestionario:
+        type: "string"
+      nomeTipoQuestionario:
+        type: "string"
+      codigoEtapaProcesso:
+        type: "integer"
+        format: "int64"
+      questoes:
+        $ref: "#/definitions/ListaQuestoesEBO"
+
+  PlanoServicoEBO:
+    type: "object"
+    properties:
+      codigoPlanoServico:
+        type: "number"
+      nomePlanoServico:
+        type: "string"
+
+  TipoServico:
+    type: "object"
+    properties:
+      codigoTipoServico:
+        type: "integer"
+        format: "int32"
+      nomeTipoServico:
+        type: "string"
+
+  BeneficioEBO:
+    type: "object"
+    properties:
+      codigoBeneficio:
+        type: "string"
+      nomeBeneficio:
+        type: "string"
+      ordemExibicao:
+        type: "integer"
+        format: "int32"
+      tipoAbrangencia:
+        type: "integer"
+        format: "int32"
+      questionarios:
+        type: "array"
+        items:
+          $ref: "#/definitions/QuestionarioSimplificado"
+      coberturasDependencias:
+        type: "array"
+        items:
+          $ref: "#/definitions/CoberturaEBO"
+      codigosTextos:
+        type: "array"
+        items:
+          type: "integer"
+          format: "int32"
+      ramoContabil:
+        type: "integer"
+        format: "int32"
+
+  DescontoApolice:
+    type: object
+    required:
+      - codigoDesconto
+    description: descontos e agravos da cotaçao
+    properties:
+      codigoDesconto:
+        description: "código do desconto aplicado"
+        type: "integer"
+        format: "int32"
+      tipoDesconto:
+        $ref: '#/definitions/TipoDesconto'
+      percentual:
+        description: número de percentual do desconto
+        type: number
+        format: double
+
+  TipoDesconto:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      tipo de desconto
+
+  RastreadorApolice:
+    type: object
+    properties:
+      concessao:
+        description: "1 - Sim / 2 - Não / 3 - Obrigatório"
+        $ref: '#/definitions/DominioApolice'
+      concessaoRisco:
+        description: "1 - Sim / 2 - Não / 3 - Obrigatório"
+        $ref: '#/definitions/DominioApolice'
+      dispositivo:
+        $ref: '#/definitions/DominioApolice'
+      rastreadorInstalado:
+        description: "1 - Sim / 2 - Não"
+        $ref: '#/definitions/DominioApolice'
+      tipoConcessao:
+        $ref: '#/definitions/DominioApolice'
+      flagContratado: #Campo utilizado no editar oferta
+        description: "Indica a opção de contratação do rastreador ofertado na proposta por parte do proponente"
+        type: boolean
+      numeroAgendamento:
+        type: integer
+
+  ApoliceBonusApolice:
+    description: "Apolice que detem o Bonus que será reaproveitado"
+    properties:
+      congenere:
+        description: "Codigo da congenere da apolice"
+        type: "integer"
+        format: "int32"
+      sucursal:
+        type: "integer"
+        format: "int32"
+      apolice:
+        type: "integer"
+        format: "int64"
+      item:
+        type: "integer"
+        format: "int32"
+      bonus:
+        $ref: "#/definitions/BonusApolice"
+      inicioVigencia:
+        type: "string"
+        format: "date"
+      fimVigencia:
+        type: "string"
+        format: "date"
+
+  BonusApolice:
+    type: "object"
+    properties:
+      valor:
+        description: "classe de bônus que pode variar de 0 a 10"
+        type: "integer"
+        format: "int32"
+        minimum: 0
+        maximum: 10
+      valorAnterior:
+        description: "classe de bônus da apolice anterior que pode variar de 0 a 10"
+        type: "integer"
+        format: "int32"
+        minimum: 0
+        maximum: 10
+      origem:
+        $ref: "#/definitions/OrigemBonusInterno"
+
+  OrigemBonusInterno:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      origem do bonus interno
+
+  FormaPagamentoApolice:
+    type: object
+    properties:
+      codigoFormaPagamento:
+        type: integer
+        format: int32
+
+  FormaPagamentoApoliceHistorico:
+    type: object
+    properties:
+      codigoFormaPagamento:
+        type: integer
+        format: int32
+      descricaoFormaPagamento:
+        type: string
+
+  FormaPagamentoParcelaApolice:
+    type: object
+    properties:
+      quantidadeParcelas:
+        type: integer
+        format: int32
+      tipoClasseCalculoPremio:
+        type: integer
+        format: int32
+      valorPrimeiraParcela:
+        type: number
+        format: double
+      valorDemaisParcelas:
+        type: number
+        format: double
+      percentualJuros:
+        type: number
+        format: double
+      valorEncargos:
+        type: number
+        format: double
+      valorIOF:
+        type: "number"
+        format: "double"
+      valorJuros:
+        type: "number"
+        format: "double"
+
+  MeioPagamentoCotacaoApolice:
+    type: object
+    description: meio de pagamento utilizado pela cotação
+    properties:
+      responsavelFinanceiro:
+        $ref: '#/definitions/PessoaRespFinanceiroApolice'
+      tipoMeioPagamento:
+        $ref: '#/definitions/TipoMeioPagamentoDominio'
+      dadosContaCorrente:
+        $ref: '#/definitions/DadosDebitoContaApolice'
+      dadosCartao:
+        $ref: '#/definitions/DadosCartaoApolice'
+      statusCartaoPorto:
+        type: integer
+        format: int32
+      flagCrossSellingCartaoPortoAceitacao:
+        type: boolean
+      codigoBandeiraPreferencia:
+        type: integer
+        format: int32
+      flagMasterAvista:
+        type: boolean
+      flagLeveAvista:
+        type: boolean
+
+  PessoaRespFinanceiroApolice:
+    allOf:
+      - $ref: '#/definitions/PessoaApolice'
+      - type: object
+        description: objeto de pessoa com dados especificos para uso do segurado
+        properties:
+          enderecos:
+            type: array
+            items:
+              $ref: '#/definitions/EnderecoApolice'
+          telefones:
+            type: array
+            items:
+              $ref: '#/definitions/TelefoneApolice'
+          enderecosEletronicos:
+            type: array
+            items:
+              $ref: '#/definitions/EnderecoEletronicoApolice'
+          flagPagadorProprioSegurado:
+            description: identifica se segurado e o pagador
+            type: "boolean"
+
+  TipoMeioPagamentoDominio:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      tipo de meio de pagamento              
+
+  DadosDebitoContaApolice:
+    type: object
+    properties:
+      banco:
+        $ref: '#/definitions/BancoDebitoConta'
+      numeroAgencia:
+        description: Número da agência, preenchido quando o tipo do meio de pagamento for Débito em conta
+        type: integer
+        format: int32
+      numeroConta:
+        description: Número da conta, preenchido quando o tipo do meio de pagamento for Débito em conta
+        type: integer
+        format: int64
+      digitoConta:
+        description: Dígito da Conta, preenchido quando o tipo do meio de pagamento for Débito em conta
+        type: string
+      digitoAgencia:
+        description: Dígito da Agencia, preenchido quando o tipo do meio de pagamento for Débito em conta
+        type: string
+      diaDebito:
+        $ref: '#/definitions/DiaDebito'
+
+  BancoDebitoConta:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      dominio de bancos do administrativo
+
+  DiaDebito:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      Dia do vencimento, preenchido quando o tipo do meio de pagamento for Débito em conta
+
+  DadosCartaoApolice:
+    type: object
+    properties:
+      codigoIdentificacao:
+        description: 'código de identificação usado na recuperação do número de cartão previamente inserido'
+        type: integer
+        format: int64
+      melhorDiaPagamento:
+        description: Campo que irá armazenar o dia de preferencia de pagamento da fatura.
+        type: integer
+        format: int32
+      bandeiraCartao:
+        $ref: '#/definitions/BandeiraCartao'
+      mesValidade:
+        description: 'mes da validade do cartão'
+        type: integer
+        format: int32
+      anoValidade:
+        description: 'ano da validade do cartão'
+        type: integer
+        format: int32
+      nomeImpressoCartao:
+        description: 'nome responsavel do cartão'
+        type: string
+      flagCartaoProponente:
+        description: 'identifica se o proponente e o dono do cartao'
+        type: string
+
+  BandeiraCartao:
+    type: object
+    properties:
+      codigoBandeiraCartao: #14
+        type: number
+        format: int32
+      siglaBandeiraCartao: #MASTERCARD
+        type: string
+      nomeBandeiraCartao: #Mastercard Brasil Ltda
+        type: string
+
+  ProgramaRelacionamentoApolice:
+    type: "object"
+    properties:
+      programa:
+        $ref: "#/definitions/Programa"
+      tipoPrograma:
+        type: "integer"
+        format: "int32"
+      pontosCliente:
+        type: "number"
+        format: "double"
+      segmentoProgramaRelacionamento:
+        $ref: "#/definitions/SegmentoPrograma"
+      faixas:
+        type: "array"
+        items:
+          $ref: "#/definitions/FaixaApolice"
+
+  Programa:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      tipo de programa de relacionamento
+
+  SegmentoPrograma:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      descrimina o segmento do programa relacionamento (uniclass/person/varejo)
+
+  FaixaApolice:
+    type: "object"
+    properties:
+      codigoFaixa:
+        type: "integer"
+        format: "int32"
+      pontos:
+        type: "integer"
+        format: "int64"
+      valorPontos:
+        type: "number"
+        format: "double"
+      porto:
+        type: "number"
+        format: "double"
+      parceiro:
+        type: "number"
+        format: "double"
+      desconto:
+        type: "number"
+        format: "double"
+      flagResgateTotal:
+        type: string
+        default: "N"
+
+  CondicaoComercialApolice:
+    type: object
+    description: 'estrutura composta por comissão, repasse, agravo de comissão e descontos relacionados ao prêmio net'
+    properties:
+      comissaoCorretor:
+        $ref: '#/definitions/ItemCondicaoComercialApolice' #comissao codigo 1
+      repasseDealer:
+        $ref: '#/definitions/ItemCondicaoComercialApolice' #repasse codigo 4
+      agravo:
+        $ref: '#/definitions/ItemCondicaoComercialApolice' #agravo codigo 2
+      descontos:
+        type: array
+        items:
+          $ref: '#/definitions/ItemCondicaoComercialApolice' #Desconto GE codigo 3
+      valorComissaoCarregado:
+        description: 'valor carregado é a soma de valor monetário da comissaoCorretor + repasseDealer'
+        type: number
+        format: double
+
+  ItemCondicaoComercialApolice:
+    type: object
+    properties:
+      codigo:
+        description: 'código do item de condição comercial'
+        type: integer
+        format: int64
+      percentual:
+        description: 'percentual aplicado enviado para precificação'
+        type: number
+        format: double
+
+  DocumentoApolice:
+    description: todos os campos da hierarquia de documentos deverão ser discriminados
+    type: object
+    properties:
+      tipoIdentificacao:
+        $ref: '#/definitions/TipoIdentificacao'
+      categoria:
+        $ref: '#/definitions/CategoriaCNH'
+      numeroDocumento:
+        description: 'número do documento sem máscara de acordo com o tipo de identificação. Zeros a esquerda devem ser discriminados. Ex.:Cpf:01234567890, Cnpj:12345678000101, Rg:XX12345678'
+        type: string
+      digitoDocumento:
+        description: 'número do documento sem máscara de acordo com o tipo de identificação. Zeros a esquerda devem ser discriminados. Ex.:Cpf:01234567890, Cnpj:12345678000101, Rg:XX12345678'
+        type: string
+      numeroOrdemDocumento:
+        description: 'número do documento sem máscara de acordo com o tipo de identificação. Zeros a esquerda devem ser discriminados. Ex.:Cpf:01234567890, Cnpj:12345678000101, Rg:XX12345678'
+        type: string
+      dataExpedicao:
+        type: string
+        format: date
+      dataVencimento:
+        type: string
+        format: date
+      orgaoEmissor:
+        $ref: '#/definitions/OrgaoEmissor'
+      motivoSemCnpjCpf:
+        $ref: '#/definitions/DominioApolice'
+
+  TipoIdentificacao:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      tipo de identificação de documento CPF(1), CNPJ(2), RNE(3), CNH(4), RG(5), CIP(6), CIF(7), PASSAPORTE(8)
+
+  CategoriaCNH:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      categoria da CNH (domínio administrativo)
+      Ex.:B(2), D(4), E(5), AB(6), AD(8), AE(9), A(1), C(3), AC(7)
+
+  OrgaoEmissor:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      codigo do órgão expeditor da base corporativa da Porto
+
+  ProcessamentoCarga:
+    type: object
+    required:
+      - numeroSucursal
+      - numeroApolice
+      - sequenciaEndosso
+
+    properties:
+      susep:
+        description: 'codigo susep'
+        type: string
+      numeroSucursal:
+        description: 'codigo da sucursal da apolice utilizada na carga'
+        type: integer
+        format: int32
+      empresa:
+        $ref: '#/definitions/EmpresaDominio'
+      marca:
+        $ref: '#/definitions/MarcaDominio'
+      numeroApolice:
+        description: 'apolice utilizada na carga'
+        type: integer
+        format: int64
+      numeroItem:
+        description: 'item da apolice utilizada na carga'
+        type: integer
+        format: int64
+      numeroEndosso:
+        description: 'endosso da apolice utilizada na carga'
+        type: integer
+        format: int64
+      sequenciaEndosso:
+        type: integer
+        format: int32
+      statusRetorno:
+        description: 'status do processamento onde OK = 446 NOK = 447'
+        type: integer
+        format: int32
+      quantidadeTentivaGravacao:
+        description: 'quantidade de tentativas de gravacao'
+        type: integer
+        format: int32
+      tipoErro:
+        description: 'tipo do do erro'
+        type: integer
+        format: int32
+      detalheErro:
+        description: 'detalhe do erro'
+        type: string
+      faseProcesso:
+        description: 'fase do processamento'
+        type: integer
+        format: int32
+      dataEmissaoApolice:
+        type: string
+        format: date
+
+  EstadoCivil:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      estados civis (domínio externo) 
+      Ex.:Solteiro, Casado etc
+
+  Sexo:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      sexos (domínio externo) 
+      Ex.:Masculino, Feminino
+  Fault:
+    type: object
+    properties:
+      mensagens:
+        type: array
+        items:
+          $ref: '#/definitions/Message'
+      dataOcorrencia:
+        type: string
+        format: date
+      fonte:
+        type: string
+      tipo:
+        type: string
+
+  Message:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      mensagem:
+        type: string
+
+  ParametrosApolicesServicoConsulta:
+    type: object
+    properties:
+      servicos:
+        type: array
+        items:
+          $ref: '#/definitions/ServicoConsulta'
+      apolice:
+        $ref: '#/definitions/ApoliceServicoConsulta'
+      dataFinalVigencia:
+        type: string
+        format: date
+      tipoConsulta:
+        type: string
+        enum: [P, L]
+      page:
+        type: integer
+        format: int32
+      per_page:
+        type: integer
+        format: int32
+
+  ApoliceServicoConsulta:
+    type: object
+    required:
+      - sucursalNumero
+      - apoliceNumero
+      - itemNumero
+    properties:
+      sucursalNumero:
+        type: integer
+        format: int32
+      apoliceNumero:
+        type: integer
+        format: int64
+      itemNumero:
+        type: integer
+        format: int32
+      empresa:
+        $ref: '#/definitions/EmpresaDominio'
+      marca:
+        $ref: '#/definitions/EmpresaDominio'
+
+  ApolicesCarregadas:
+    type: object
+    properties:
+      quantidadePorEmpresa:
+        type: array
+        items:
+          $ref: '#/definitions/QuantidadePorEmpresa'
+
+
+  ApoliceRenovacaoCotacao:
+    type: object
+    required:
+      - sucursalNumero
+      - apoliceNumero
+      - itemNumero
+    properties:
+      sucursalNumero:
+        type: integer
+        format: int32
+      apoliceNumero:
+        type: integer
+        format: int64
+      itemNumero:
+        type: integer
+        format: int32
+      empresa:
+        $ref: '#/definitions/EmpresaDominio'
+      marca:
+        $ref: '#/definitions/MarcaDominio'
+      flagExecucaoManual:
+        type: string
+        default: "S"
+      numeroSequenciaEndosso:
+        type: integer
+        format: int32
+      flagProtecaoCombinada:
+        type: string
+      flagTransferenciaCorretagem:
+        type: boolean
+        default: false
+      susepDestino:
+        type: string
+      flagWorksiteConcorrencia:
+        type: string
+      codigoPessoaWorksite:
+        type: integer
+        format: int64 
+      flagTransferenciaCarteira:
+         type: string
+         default: "N"
+      cqPremios:
+          # 0 - Não habilitado, 1 - Habilitado Sinapse, 2 - Habilitado certificação técnica
+          type: integer
+          format: int32
+          default: 0
+      flagAzulEmissaoLinhaVerde:
+        description: flag que irá indicar se é uma EmissaoAzul dentro do Linha Verde
+        type: boolean
+        default: false
+      flagRenovacaoProgramada:
+        type: boolean
+        default: false
+      numeroCotacaoOrigem:
+        type: integer
+        format: int64
+        
+  QuantidadePorEmpresa:
+    type: object
+    required:
+      - empresa
+    properties:
+      empresa:
+        $ref: '#/definitions/EmpresaDominio'
+      marca:
+        $ref: '#/definitions/MarcaDominio'
+      quantidadePordataEmissao:
+        type: array
+        items:
+          $ref: '#/definitions/QuantidadePorDataEmissao'
+      totalEmpresa:
+        type: integer
+        format: int32
+
+  QuantidadePorDataEmissao:
+    type: object
+    properties:
+      quantidade:
+        type: integer
+        format: int32
+      dataEmissao:
+        type: string
+        format: date
+
+  ApoliceEntrada:
+    type: object
+    properties:
+      numeroSucursal:
+        type: integer
+        format: int32
+      numeroApolice:
+        type: integer
+        format: int64
+      numeroItem:
+        type: integer
+        format: int32
+
+  ApoliceResumida:
+    type: object
+    properties:
+      empresa:
+        type: integer
+        format: int32
+      marca:
+        type: integer
+        format: int32
+      numeroSucursal:
+        type: integer
+        format: int32
+      numeroApolice:
+        type: integer
+        format: int64
+      numeroItem:
+        type: integer
+        format: int32
+      codigoIdentificacaoApolice:
+        type: integer
+        format: int64
+      endossos:
+        type: array
+        items:
+          $ref: '#/definitions/EndossoResumido'
+
+  CargaCategoriaTarifaria:
+    type: object
+    properties:
+      codigoCategoriaTarifaria:
+        type: integer
+        format: int32
+      codigoSucursal:
+        type: integer
+        format: int32
+      codigoEmpresa:
+        type: integer
+        format: int32
+      numeroApolice:
+        type: integer
+        format: int64
+      numeroItem:
+        type: integer
+        format: int32
+
+
+  EndossoResumido:
+    type: object
+    properties:
+      dataEmissao:
+        type: string
+        format: date
+      dataCarregamento:
+        type: string
+        format: date
+      numeroEndosso:
+        type: integer
+        format: int64
+      desFaseProcessamento:
+        type: string
+      descricaoStatusProcessamento:
+        type: string
+      qtdTentativasReprocessamento:
+        type: integer
+        format: int32
+      flagPermiteAtualizacao:
+        type: string
+
+
+  ApoliceServicoConsultaCompleta:
+    type: object
+    properties:
+      servicos:
+        type: array
+        items:
+          $ref: '#/definitions/ServicoConsulta'
+      apolice:
+        $ref: '#/definitions/Apolice'
+      servicosExecutados:
+        $ref: '#/definitions/ServicosExecutados'
+
+  ServicosExecutados:
+    type: object
+    properties:
+      dadosSegurado:
+        type: "boolean"
+
+  ServicoConsultaExecucao:
+    type: object
+    properties:
+      numeroLote:
+        type: integer
+        format: int32
+
+  ApoliceRenovacaoCotacaoConsulta:
+    type: object
+    properties:
+      apolice:
+        $ref: '#/definitions/Apolice'
+
+  RetornoCargaApolice:
+    type: object
+    properties:
+      numeroApolice:
+        type: integer
+        format: int64
+      numeroItem:
+        type: integer
+        format: int32
+      empresa:
+        type: integer
+        format: int32
+      numeroLote:
+        type: integer
+        format: int32
+      codigoStatusErro:
+        type: integer
+        format: int32
+
+  EntradaListaApolicesLote:
+    type: object
+    properties:
+      numeroLote:
+        type: integer
+        format: int32
+      parametroDataInicial:
+        type: string
+        format: date
+      parametroDataFinal:
+        type: string
+        format: date
+      empresas:
+        type: array
+        items:
+          $ref: '#/definitions/DominioApolice'
+      marcas:
+        type: array
+        items:
+          $ref: '#/definitions/DominioApolice'
+
+  VigenciaControleProcessamento:
+    type: object
+    properties:
+      parametroDataInicial:
+        type: string
+        format: date
+      parametroDataFinal:
+        type: string
+        format: date
+
+  RetornoListaApolicesLote:
+    type: object
+    properties:
+      numeroLote:
+        type: integer
+        format: int32
+      empresa:
+        $ref: '#/definitions/DominioApolice'
+      sucursal:
+        type: integer
+        format: int32
+      numeroApolice:
+        type: integer
+        format: int64
+      numeroItem:
+        type: integer
+        format: int32
+      statusApolice:
+        $ref: '#/definitions/DominioApolice'
+      dataInicioVigencia:
+        type: string
+        format: date
+      dataFimVigencia:
+        type: string
+        format: date
+      numeroEndoso:
+        type: integer
+        format: int64
+      susep:
+        type: string
+      quantidadeItensApolice:
+        type: integer
+        format: int32
+      categoriaTarifaria:
+        type: integer
+        format: int32
+      codigoMarca:
+        type: integer
+        format: int32
+
+  CadastroServico:
+    type: object
+    properties:
+      codigo:
+        type: integer
+        format: int32
+
+  ControleProcessamento:
+    type: object
+    properties:
+      numeroSucursal:
+        type: integer
+        format: int32
+      numeroApolice:
+        type: integer
+        format: int64
+      numeroItem:
+        type: integer
+        format: int32
+      codigoLote:
+        type: integer
+        format: int32
+      empresa:
+        $ref: '#/definitions/DominioApolice'
+      marca:
+        $ref: '#/definitions/DominioApolice'
+      statusLote:
+        $ref: '#/definitions/DominioApolice'
+      servicos:
+        type: array
+        items:
+          $ref: '#/definitions/ServicoConsultaDocument'
+
+  ServicoConsultaDocument:
+    type: object
+    properties:
+      codigoServico:
+        type: integer
+        format: int32
+      execucaoServicos:
+        type: array
+        items:
+          $ref: '#/definitions/ExecucaoServico'
+
+  ExecucaoServico:
+    type: object
+    properties:
+      statusConsultaServico:
+        type: integer
+        format: int32
+      sequenciaExecucaoServico:
+        type: integer
+        format: int32
+      sequenciaConsultaServico:
+        type: integer
+        format: int32
+      idEntradaServico:
+        type: string
+      idRetornoServico:
+        type: string
+
+  Critica:
+    type: "object"
+    properties:
+      codigo:
+        type: "integer"
+        format: "int32"
+      descricao:
+        type: "string"
+      flagLiberacao:
+        type: "string"
+      codigoCenario:
+        type: "integer"
+        format: "int32"
+      statusCenario:
+        type: "string"
+      codigodevolutiva:
+        type: "integer"
+        format: "int32"
+
+
+  VersaoSegmentoEBO:
+    type: "object"
+    properties:
+      codigoSegmento:
+        type: "integer"
+        format: "int32"
+      numeroVersaoSegmento:
+        type: "integer"
+        format: "int32"
+      numeroSequenciaVersaoSegmento:
+        type: "integer"
+        format: "int64"
+
+  ListaQuestionariosProdutoComercialEBO:
+    type: "object"
+    properties:
+      questionario:
+        type: "array"
+        items:
+          $ref: "#/definitions/QuestionarioEBO"
+
+  QuestionarioEBO:
+    type: "object"
+    properties:
+      codigoQuestionario:
+        type: "integer"
+        format: "int32"
+      codigoTipoQuestionario:
+        type: "integer"
+        format: "int32"
+      nomeTipoQuestionario:
+        type: "string"
+      ordemExibicaoQuestionario:
+        type: "integer"
+        format: "int32"
+      nomeResumidoQuestionario:
+        type: "string"
+      nomeQuestionario:
+        type: "string"
+      codigoEtapaProcesso:
+        type: "integer"
+        format: "int64"
+      numeroVersaoQuestionario:
+        type: "integer"
+        format: "int64"
+      questoes:
+        $ref: "#/definitions/ListaQuestoesEBO"
+
+  ListaQuestoesEBO:
+    type: "object"
+    properties:
+      questao:
+        type: "array"
+        items:
+          $ref: "#/definitions/QuestaoEBO"
+
+  QuestaoEBO:
+    type: "object"
+    properties:
+      codigoQuestao:
+        type: "integer"
+        format: "int32"
+      numeroOrdemExibicao:
+        type: "integer"
+        format: "int32"
+      flagRespostaObrigatorio:
+        type: "string"
+      flagPossuiVinculo:
+        type: "string"
+      codigoTipoQuestao:
+        type: "integer"
+        format: "int32"
+      codigoMascaraQuestao:
+        type: "integer"
+        format: "int32"
+      codigoListaValor:
+        type: "integer"
+        format: "int32"
+      codigoListaItem:
+        type: "integer"
+        format: "int32"
+      codigoAssunto:
+        type: "integer"
+        format: "int32"
+      textoQuestao:
+        type: "string"
+      descricao:
+        type: "string"
+      vinculos:
+        $ref: "#/definitions/ListaVinculosEBO"
+      flagPossuiRespostaPadrao:
+        type: "string"
+      respostasPadrao:
+        $ref: "#/definitions/ListaRespostasPadraoEBO"
+      listaValores:
+        $ref: "#/definitions/ListaItensListaValorQuestaoEBO"
+      listaRelacaoItens:
+        $ref: "#/definitions/ListaComponentesListaItemQuestaoEBO"
+      flagAlteracao:
+        description: "Flag que determina se é possível alterar a resposta do questionário. Permite alteração da resposta = true, Não permite alteração da resposta = false"
+        type: "boolean"
+
+  ListaComponentesListaItemQuestaoEBO:
+    type: "object"
+    properties:
+      componenteListaItemQuestao:
+        type: "array"
+        items:
+          $ref: "#/definitions/ComponenteListaItemQuestaoEBO"
+
+  ComponenteListaItemQuestaoEBO:
+    type: "object"
+    properties:
+      codigoListaItem:
+        type: "integer"
+        format: "int32"
+      codigoComponenteListaItem:
+        type: "integer"
+        format: "int32"
+      codigoListaValor:
+        type: "integer"
+        format: "int32"
+      codigoMascaraQuestao:
+        type: "integer"
+        format: "int32"
+      codigoTipoQuestao:
+        type: "integer"
+        format: "int32"
+      nomeComponenteListaItem:
+        type: "string"
+      flagAtivo:
+        type: "string"
+
+  ListaItensListaValorQuestaoEBO:
+    type: "object"
+    properties:
+      itemListaValorQuestao:
+        type: "array"
+        items:
+          $ref: "#/definitions/ItemListaValorQuestaoEBO"
+
+  ItemListaValorQuestaoEBO:
+    type: "object"
+    properties:
+      codigoListaValor:
+        type: "integer"
+        format: "int32"
+      codigoItemListaValor:
+        type: "integer"
+        format: "int32"
+      nomeItemListaValor:
+        type: "string"
+      flagAtivo:
+        type: "string"
+      textos:
+        type: "array"
+        items:
+          $ref: "#/definitions/TextoResposta"
+
+  TextoResposta:
+    type: "object"
+    properties:
+      codigoTextoResposta:
+        type: "integer"
+        format: "int32"
+      numeroOrdemExibicao:
+        type: "integer"
+        format: "int32"
+
+  ListaRespostasPadraoEBO:
+    type: "object"
+    properties:
+      respostaPadrao:
+        type: "array"
+        items:
+          $ref: "#/definitions/RespostaPadraoEBO"
+
+  RespostaPadraoEBO:
+    type: "object"
+    properties:
+      codigoResposta:
+        type: "integer"
+        format: "int32"
+      textoResposta:
+        type: "string"
+
+  ListaVinculosEBO:
+    type: "object"
+    properties:
+      vinculo:
+        type: "array"
+        items:
+          $ref: "#/definitions/VinculoQuestaoEBO"
+
+  VinculoQuestaoEBO:
+    type: "object"
+    properties:
+      codigoQuestionario:
+        type: "integer"
+        format: "int32"
+      numeroVersaoQuestionario:
+        type: "integer"
+        format: "int64"
+      codigoQuestao:
+        type: "integer"
+        format: "int32"
+      codigoQuestaoVinculo:
+        type: "integer"
+        format: "int32"
+      codigoVinculo:
+        type: "integer"
+        format: "int32"
+      codigoOperadorCalculo:
+        type: "integer"
+        format: "int32"
+      textoResposta:
+        type: "array"
+        items:
+          type: "string"
+      textoRespostaVinculo:
+        type: "array"
+        items:
+          type: "string"
+      flagPossuiFiltroQuestaoVinculo:
+        type: "string"
+
+  DescontoAgravoSegmento:
+    type: "object"
+    properties:
+      codigoDescontoAgravo:
+        type: "integer"
+        format: "int32"
+      nomeResumidoDescontoAgravo:
+        type: "string"
+      nomeDescontoAgravo:
+        type: "string"
+      percentualMinimoDescontoAgravo:
+        type: "number"
+        format: "double"
+      percentualMaximoDescontoAgravo:
+        type: "number"
+        format: "double"
+      limiteMinimoDescontoAgravo:
+        type: "number"
+        format: "double"
+      limiteMaximoDescontoAgravo:
+        type: "number"
+        format: "double"
+      ordemExibicao:
+        type: "integer"
+        format: "int32"
+      flagConcessaoAutomatica:
+        type: "boolean"
+      dependencias:
+        type: "array"
+        items:
+          $ref: "#/definitions/DependenciaDesconto"
+      tipoDescontoAgravo:
+        $ref: "#/definitions/TipoDescontoAgravoSegmento"
+      codigosTextos:
+        type: "array"
+        items:
+          type: "integer"
+          format: "int32"
+      listaTipoVisualizacao:
+        type: "array"
+        items:
+          $ref: "#/definitions/TipoVisualizacao"
+      tipoAbrangencia:
+        type: "integer"
+        format: "int32"
+      flagAplicaDescontoEndosso:
+        type: "boolean"
+      flagAtualizaPercentual:
+        type: "boolean"
+      flagCarregaApolice:
+        type: "boolean"
+      coberturasAssociadas:
+        type: "array"
+        items:
+          type: "integer"
+          format: "int32"
+      franquiasAssociadas:
+        type: "array"
+        items:
+          type: "integer"
+          format: "int32"
+      servicosAssociados:
+        type: "array"
+        items:
+          type: "integer"
+          format: "int32"
+
+  TipoDescontoAgravoSegmento:
+    type: "object"
+    properties:
+      codigoTipoDescontoAgravo:
+        type: "integer"
+        format: "int32"
+      nomeTipoDescontoAgravo:
+        type: "string"
+
+  TipoVisualizacao:
+    type: "object"
+    properties:
+      codigo:
+        type: "integer"
+        format: "int32"
+      nome:
+        type: "string"
+
+
+  CotacaoRenovacao:
+    type: object
+    properties:
+      identificador:
+        $ref: '#/definitions/Identificador'
+      numeroCotacao:
+        type: "integer"
+        format: "int64"
+      versaoCotacao:
+        type: integer
+        format: int32
+      sucursalApolice:
+        type: integer
+        format: int32
+      numeroApolice:
+        type: integer
+        format: int64
+      segurado:
+        $ref: '#/definitions/SeguradoRenovacao'
+      corretor:
+        $ref: '#/definitions/CorretorRenovacao'
+      tipoSeguro:
+        description: "tipos de seguro (domínio externo)\nEx.:Seguro Novo, Renovação, Endosso etc\n"
+        $ref: '#/definitions/Dominio'
+      tipoProcesso:
+        $ref: '#/definitions/Dominio'
+      tipoEndosso:
+        $ref: '#/definitions/Dominio'
+      tipoAceitacao:
+        description: "tipos de aceitacao (domínio externo)\nEx.:Aceitacao Previa, Aceitacao Pre, Aceitacao Pos\n"
+        $ref: '#/definitions/Dominio'
+      orcamentos:
+        type: array
+        items:
+          $ref: '#/definitions/OrcamentoRenovacao'
+      dataCriacao:
+        type: string
+        format: date-time
+      canalOrigemCalculo:
+        description: 'Origem do calculo: Parceiros, corretor, ppweb, pol etc'
+        $ref: '#/definitions/Dominio'
+      dataCalculo:
+        type: string
+        format: date-time
+      dataValidade:
+        type: string
+        format: date-time
+      dispensaVpOnline:
+        $ref: '#/definitions/DispensaVpOnline'
+      analistaObrigaRastreador:
+        description: "Usado em regras Concede Rastreador / Padrão False"
+        type: boolean
+      analistaDispensaRastreador:
+        description: "Usado em regras Concede Rastreador / Padrão False"
+        type: boolean
+      analistaObrigaVP:
+        description: "Usado em regras da VP / Padrão False"
+        type: boolean
+      analistaDispensaVP:
+        description: "Usado em regras da VP / Padrão False"
+        type: boolean
+
+  Identificador:
+    type: object
+    properties:
+      id:
+        type: string
+
+  SeguradoRenovacao:
+    description: "segurado. \nObs.:Segurado é uma pessoa\n"
+    properties:
+      pessoa:
+        $ref: '#/definitions/PessoaRenovacao'
+      classeBonus:
+        description: 'Class de bônus do segurado'
+        type: integer
+        format: int32
+
+  PessoaRenovacao:
+    type: object
+    properties:
+      quantidadeCarrinho:
+        type: integer
+        format: int32
+      scoreSerasa:
+        type: integer
+        format: int32
+      scoreCorrentistaItau:
+        type: integer
+        format: int64
+      segmentoCorrentista:
+        type: integer
+        format: int32
+      dadosCadastraisGrupoSerasa:
+        $ref: '#/definitions/CadastroGrupoSerasa'
+      sinistro:
+        $ref: '#/definitions/Sinistro'
+      dossies:
+        type: array
+        items:
+          $ref: '#/definitions/Dossie'
+      codigo:
+        type: integer
+        format: int64
+      tipoPessoa:
+        $ref: '#/definitions/Dominio'
+      estadoCivil:
+        $ref: '#/definitions/Dominio'
+      sexo:
+        $ref: '#/definitions/Dominio'
+      dataNascimento:
+        type: string
+        format: date
+      nomeLegalPessoa:
+        type: string
+      nomeSocialPessoa:
+        type: string
+      flagPiorRisco:
+        type: boolean
+      scoreProbabilidadeFraude:
+        type: number
+        format: float
+      documentos:
+        type: array
+        items:
+          $ref: '#/definitions/Documento'
+      personas:
+        type: integer
+        format: int32
+      codigoNivelRelacionamento:
+        type: integer
+        format: int32
+      codigoTempoCasaPorto:
+        type: integer
+        format: int32
+      codigoTempoCasaItau:
+        type: integer
+        format: int32
+      codigoTempoCasaAzul:
+        type: integer
+        format: int32
+      spOnline:
+        $ref: '#/definitions/SpOnline'
+      scoreCartaoColisao:
+        type: integer
+        format: int32
+
+  CadastroGrupoSerasa:
+    type: object
+    properties:
+      nomePessoa:
+        type: string
+
+  Sinistro:
+    type: object
+    properties:
+      ocorrencias:
+        $ref: '#/definitions/Ocorrencia'
+
+  Ocorrencia:
+    type: object
+    properties:
+      basePesquisa:
+        type: string
+      natureza:
+        type: integer
+        format: int32
+      dataOcorrencia:
+        type: string
+        format: date-time
+      tipoPerda:
+        type: integer
+        format: int32
+      sinistroAutomovel:
+        type: boolean
+      codigoRamo:
+        type: integer
+        format: int32
+      sinistroRCF:
+        type: boolean
+      motivoEncerramento:
+        type: integer
+        format: int32
+
+  Dossie:
+    type: object
+    properties:
+      codigo:
+        type: integer
+        format: int32
+      tipo:
+        type: string
+      ramo:
+        type: integer
+        format: int32
+      flagDA:
+        type: boolean
+
+  Documento:
+    description: 'todos os campos da hierarquia de documentos deverão ser discriminados'
+    type: object
+    properties:
+      tipoIdentificacao:
+        description: 'tipos de identificações de documento (domínio externo) Ex.: CPF, CNPJ, RG etc'
+        $ref: '#/definitions/Dominio'
+      numeroDocumento:
+        description: "\"número do documento sem máscara de acordo com o tipo de identificação. Zeros a esquerda devem ser discriminados. Ex.: Cpf: 01234567890; Cnpj:12345678000101; Rg:XX12345678\"\n"
+        type: string
+
+  SpOnline:
+    type: object
+    properties:
+      valorPremio:
+        type: integer
+        format: int64
+      valorSinistro:
+        type: integer
+        format: int64
+      quantidadeApolice:
+        type: integer
+        format: int32
+      spOnline:
+        type: integer
+        format: int32
+
+  CorretorRenovacao:
+    type: object
+    properties:
+      nome:
+        type: string
+      susep:
+        type: string
+      codigoSucursal:
+        type: integer
+        format: int32
+      scoreCorretor:
+        type: integer
+        format: int32
+
+  OrcamentoRenovacao:
+    type: object
+    properties:
+      identificador:
+        type: integer
+        format: int64
+      codigo:
+        type: integer
+        format: int64
+      chassiOferta:
+        type: string
+      empresa:
+        $ref: '#/definitions/Dominio'
+      seguradoCorretor:
+        $ref: '#/definitions/SeguradoCorretor'
+      inicioVigencia:
+        type: string
+        format: date
+      tipoVigencia:
+        $ref: '#/definitions/Dominio'
+      fimVigencia:
+        type: string
+        format: date
+      dataCalculo:
+        type: string
+        format: date-time
+      status:
+        $ref: '#/definitions/Dominio'
+      percentualComissao:
+        type: number
+      valorPremioAnual:
+        type: number
+        format: double
+      valorPremioFinal:
+        type: number
+        format: double
+      valorPremio:
+        type: number
+        format: double
+      valorPremioMinimo:
+        type: number
+        format: double
+      itens:
+        type: array
+        items:
+          $ref: '#/definitions/ItemRenovacao'
+      flagRiscoRestrito:
+        type: boolean
+
+  SeguradoCorretor:
+    type: object
+    properties:
+      cpfCorretor:
+        type: string
+      qtdeApoliceAtiva:
+        type: integer
+        format: int32
+      flagSeguroCorretor:
+        type: boolean
+
+  ItemRenovacao:
+    type: object
+    properties:
+      numeroItem:
+        type: integer
+        format: int64
+      dadosLocalidade:
+        $ref: '#/definitions/DadosLocalidade'
+      veiculo:
+        $ref: '#/definitions/VeiculoRenovacao'
+      condutores:
+        type: array
+        items:
+          $ref: '#/definitions/CondutorRenovacao'
+      valorPremioFinal:
+        type: number
+        format: double
+      valorPremioLiquido:
+        type: number
+        format: double
+      taxaComercialFinal:
+        type: number
+        format: double
+      gradeAceitação:
+        type: number
+        format: double
+      nivelVistoriaPrevia:
+        type: number
+        format: double
+      coberturas:
+        type: array
+        items:
+          $ref: '#/definitions/CoberturaRenovacao'
+      servicos:
+        type: array
+        items:
+          $ref: '#/definitions/ServicoRenovacao'
+
+  DadosLocalidade:
+    type: "object"
+    properties:
+      numeroLocalidadePostal:
+        type: "integer"
+        format: "int64"
+      regiaoTarifaria:
+        type: "integer"
+        format: "int64"
+      classeLocalizacao:
+        type: "integer"
+        format: "int64"
+      faixaPopulacional:
+        type: "integer"
+        format: "int64"
+      codigoSucursal:
+        type: "integer"
+        format: "int32"
+
+  VeiculoRenovacao:
+    type: "object"
+    properties:
+      dossiesPlaca:
+        type: array
+        items:
+          $ref: '#/definitions/Dossie'
+      dossiesChassi:
+        type: array
+        items:
+          $ref: '#/definitions/Dossie'
+      vistoriaPrevia:
+        $ref: '#/definitions/VistoriaPreviaRenovacao'
+      veiculosAtivos:
+        type: array
+        items:
+          $ref: '#/definitions/VeiculoAtivoRenovacao'
+      nortix:
+        $ref: '#/definitions/NortixRenovacao'
+      placaBinSiseg:
+        $ref: '#/definitions/BinSisegRenovacao'
+      chassiBinSiseg:
+        $ref: '#/definitions/BinSisegRenovacao'
+      sinistroRNS:
+        type: array
+        items:
+          $ref: '#/definitions/SinistroRNSRenovacao'
+      placa:
+        type: string
+      chassi:
+        type: string
+      cepPernoite:
+        type: integer
+        format: int32
+      anoFabricacaoVeiculo:
+        type: integer
+        format: int32
+      categoriaTarifaria:
+        type: integer
+        format: int32
+      tipoKitGas:
+        $ref: '#/definitions/Dominio'
+      flagAlienado:
+        type: boolean
+      zeroKM:
+        type: boolean
+      flagChassiRemarcado:
+        type: boolean
+      blindagem:
+        $ref: '#/definitions/Dominio'
+      flagVistoriaPrevia:
+        type: boolean
+      tipoIsencao:
+        $ref: '#/definitions/Dominio'
+      flagVeiculoPcd:
+        type: boolean
+      tipoCambio:
+        $ref: '#/definitions/Dominio'
+      quantidadePassageiros:
+        type: integer
+        format: int32
+      tipoUso:
+        $ref: '#/definitions/Dominio'
+      cadastroVeiculo:
+        $ref: '#/definitions/ValorMercadoVeiculoType'
+      valorBase:
+        type: number
+        format: double
+      flagComodatoCep:
+        type: boolean
+      flagForcaComodato:
+        type: boolean
+
+  VistoriaPreviaRenovacao:
+    type: "object"
+    properties:
+      anoFabricacao:
+        type: integer
+        format: int32
+      anoModelo:
+        type: integer
+        format: int32
+      chassiFinal:
+        type: string
+      chassiInicial:
+        type: string
+      licenca:
+        type: string
+      avarias:
+        type: array
+        items:
+          $ref: "#/definitions/Avaria"
+      codigoModelo:
+        type: integer
+        format: int32
+      codigoSituacao:
+        type: integer
+        format: int32
+      codigoStatus:
+        type: integer
+        format: int32
+      data:
+        type: string
+        format: date-time
+      dispositivosInstalados:
+        type: array
+        items:
+          $ref: "#/definitions/DispositivoInstalado"
+      kilometragem:
+        type: integer
+        format: int32
+      quantidadePortas:
+        type: integer
+        format: int32
+      tipoCombustivel:
+        type: integer
+        format: int32
+      numeroMotor:
+        type: string
+      statusLaudoVistoriaPrevia:
+        type: integer
+        format: int32
+      numeroLaudo:
+        type: string
+      acessorios:
+        type: array
+        items:
+          $ref: "#/definitions/Acessorios"
+      acompanhamentosStatusVistoriaPrevia:
+        type: array
+        items:
+          $ref: "#/definitions/AcompanhamentoStatusVP"
+
+  AcompanhamentoStatusVP:
+    type: "object"
+    properties:
+      codigoStatusVistoriaPrevia:
+        type: integer
+        format: int32
+      dataAtualizacao:
+        type: string
+        format: date-time
+      numeroDigitoLaudoVistoria:
+        type: string
+      statusStatusVistoria:
+        type: string
+      tipoUsuarioQueEfetuouAtualizacao:
+        type: string
+
+  Avaria:
+    type: "object"
+    properties:
+      codigo:
+        type: integer
+        format: int32
+      tipo:
+        type: integer
+        format: int32
+
+  DispositivoInstalado:
+    type: "object"
+    properties:
+      tipo:
+        type: integer
+        format: int32
+      descricao:
+        type: string
+      situacao:
+        type: integer
+        format: int32
+      codigo:
+        type: integer
+        format: int32
+
+  Acessorios:
+    type: object
+    properties:
+      tipo:
+        type: integer
+        format: int32
+      codigoAcessorio:
+        type: integer
+        format: int64
+      valorImportanciaSegurada:
+        type: "number"
+        format: double
+      valorFranquia:
+        type: "number"
+        format: "double"
+      valorPremio:
+        type: "number"
+        format: "double"
+
+  VeiculoAtivoRenovacao:
+    type: "object"
+    properties:
+      codigoEmpresa:
+        type: integer
+        format: int32
+      statusVeiculoAtivo:
+        type: boolean
+
+  NortixRenovacao:
+    type: "object"
+    properties:
+      placa:
+        type: string
+      chassi:
+        type: string
+      dadosLeiloes:
+        type: array
+        items:
+          $ref: "#/definitions/DadosLeilao"
+
+  DadosLeilao:
+    type: "object"
+    properties:
+      placa:
+        type: string
+      chassi:
+        type: string
+      nsuVeiculo:
+        type: integer
+        format: int32
+      idLeilao:
+        type: integer
+        format: int32
+      lote:
+        type: string
+      marca:
+        type: string
+      modelo:
+        type: string
+      anoModelo:
+        type: integer
+        format: int32
+      anoFabricacao:
+        type: integer
+        format: int32
+      cor:
+        type: string
+      combustivel:
+        type: string
+      categoriaDoVeiculo:
+        type: string
+      nrMotor:
+        type: string
+      quantidadeDeEixos:
+        type: string
+      patio:
+        type: string
+      leiloeiro:
+        type: string
+      dataLeilao:
+        type: string
+        format: date-time
+      sucateamento:
+        type: integer
+        format: int32
+
+  BinSisegRenovacao:
+    type: "object"
+    properties:
+      restricaoBin1:
+        type: string
+      restricaoBin2:
+        type: string
+      restricaoBin3:
+        type: string
+      restricaoBin4:
+        type: string
+      chassi:
+        type: string
+      placa:
+        type: string
+
+  SinistroRNSRenovacao:
+    type: "object"
+    properties:
+      placa:
+        type: string
+      seguradora:
+        type: string
+      chassi:
+        type: string
+      ramo:
+        type: integer
+        format: int32
+      natureza:
+        type: integer
+        format: int32
+      sinistro:
+        type: integer
+        format: int32
+      cobertura:
+        type: integer
+        format: int32
+      apolice:
+        $ref: '#/definitions/ApoliceRNS'
+      motivoEncerramento:
+        $ref: '#/definitions/EncerramentoRNS'
+
+  ApoliceRNS:
+    type: "object"
+    properties:
+      cpfSegurado:
+        type: string
+      terceiroEnvolvido:
+        type: string
+      situacaoSinistro:
+        type: string
+      qtdSinistro:
+        type: integer
+        format: int32
+      statusSinistro:
+        type: string
+
+  EncerramentoRNS:
+    type: "object"
+    properties:
+      tipoIndenizacao:
+        type: integer
+        format: int32
+      vigenciaInicial:
+        type: string
+        format: date-time
+      vigenciaFinal:
+        type: string
+        format: date-time
+      dataOcorrencia:
+        type: string
+        format: date-time
+      dataCancelamento:
+        type: string
+        format: date-time
+      dataBaixa:
+        type: string
+        format: date-time
+      dataAvisoSinistro:
+        type: string
+        format: date-time
+
+  CondutorRenovacao:
+    description: "condutor do veículo. \nObs.:Condutor é uma pessoa\n"
+    properties:
+      pessoa:
+        $ref: '#/definitions/PessoaRenovacao'
+
+  CoberturaRenovacao:
+    type: "object"
+    properties:
+      codigoCobertura:
+        type: integer
+        format: int32
+      valorImportanciaSegurada:
+        type: number
+        format: double
+      valorPremioAnual:
+        type: number
+        format: double
+      valorPremioFinal:
+        type: number
+        format: double
+      valorPremio:
+        type: number
+        format: double
+      valorFranquia:
+        type: number
+        format: double
+      franquiasEscolhidas:
+        type: array
+        items:
+          $ref: '#/definitions/FranquiaRenovacao'
+      acessoriosContratados:
+        type: array
+        items:
+          $ref: '#/definitions/Acessorios'
+
+  FranquiaRenovacao:
+    type: "object"
+    properties:
+      codigoFranquia:
+        type: "integer"
+        format: "int64"
+
+  ServicoRenovacao:
+    type: "object"
+    properties:
+      codigoServico:
+        type: integer
+        format: int32
+      valorPremioAnual:
+        type: 'number'
+        format: 'double'
+      valorPremio:
+        type: 'number'
+        format: 'double'
+      valorPremioCartao:
+        type: 'number'
+        format: 'double'
+      valorPremioOfertaCartao:
+        type: 'number'
+
+  DispensaVpOnline:
+    type: object
+    properties:
+      codigoErro:
+        type: integer
+        format: int32
+      mensagemErro:
+        type: string
+      veiculo:
+        $ref: '#/definitions/VeiculoVp'
+      pessoas:
+        type: array
+        items:
+          $ref: '#/definitions/PessoaVp'
+      cidade:
+        $ref: '#/definitions/CidadeVp'
+      corretor:
+        $ref: '#/definitions/CorretorVp'
+      vpRealizadaLE:
+        type: boolean
+      vpDispensada:
+        type: boolean
+      vpStatus:
+        type: boolean
+      vpCategoriaTarifaria:
+        type: boolean
+      vpFinalidade:
+        type: boolean
+
+  CorretorVp:
+    type: object
+    properties:
+      susep:
+        type: string
+
+  CidadeVp:
+    type: object
+    properties:
+      uf:
+        type: boolean
+      cidade:
+        type: boolean
+      classeLocalizacao:
+        type: boolean
+
+  PessoaVp:
+    type: object
+    properties:
+      cpf:
+        type: string
+      scoreBaseMultiCanal:
+        type: integer
+        format: int32
+
+  VeiculoVp:
+    type: object
+    properties:
+      vpUltimosAnos:
+        type: boolean
+
+  Dominio:
+    description: "domínios externos ao modelo de cotação (administrativo)"
+    type: "object"
+    properties:
+      codigo:
+        description: "código do domínio"
+        type: "integer"
+        format: "int32"
+      descricao:
+        description: 'descrição do domínio'
+        type: string
+
+  ApoliceCargaSinapse:
+    type: object
+    properties:
+      numeroSucursal:
+        type: integer
+        format: int64
+      numeroApolice:
+        type: integer
+        format: int64
+      numeroItem:
+        type: integer
+        format: int32
+      empresa:
+        type: integer
+        format: int32
+      marca:
+        type: integer
+        format: int32
+      numeroLote:
+        type: integer
+        format: int32
+      EtapasDocumentoSinapse:
+        $ref: '#/definitions/EtapaDocumentoSinapse'
+
+  ControleEnvioSinapse:
+    type: object
+    properties:
+      empresa:
+        type: integer
+        format: int32
+      numeroSucursal:
+        type: integer
+        format: int32
+      numeroApolice:
+        type: integer
+        format: int64
+      numeroItem:
+        type: integer
+        format: int32
+      numeroLote:
+        type: integer
+        format: int32
+      status:
+        type: integer
+        format: int32
+      quantidadeTentativas:
+        type: integer
+        format: int32
+
+  EtapaDocumentoSinapse:
+    type: object
+    properties:
+      flagServicosPreviosConcluidos:
+        type: "string"
+      descricaoFasesDocumento:
+        type: array
+        items:
+          $ref: '#/definitions/DescricaoFaseDocumento'
+
+  DescricaoFaseDocumento:
+    type: object
+    properties:
+      etapa:
+        $ref: '#/definitions/DominioApolice'
+      faseConcluida:
+        type: "string"
+
+  PayloadEntradaEnvelhecimento:
+    type: object
+    properties:
+      apoliceOriginal:
+        $ref: "#/definitions/Apolice"
+      apoliceAtual:
+        $ref: "#/definitions/Apolice"
+
+  GeracaoCotacaoRenovacaoResponse:
+    type: object
+    properties:
+      codigoEmpresa:
+        type: integer
+        format: int32
+      codigoMarca:
+        type: integer
+        format: int32
+      numeroSucursal:
+        type: integer
+        format: int32
+      numeroApolice:
+        type: integer
+        format: int64
+      numeroItem:
+        type: integer
+        format: int32
+      susep:
+        type: string
+      numeroCotacao:
+        type: integer
+        format: int64
+      mensagemErro:
+        type: string
+      flagExecucaoManual:
+        type: string
+      codigoRetorno:
+        type: integer
+        format: int32
+        #          1 = Sucesso, 2 = Erro
+        enum: [1, 2]
+      flagTransferenciaCorretagem:
+        type: boolean
+        default: false
+      susepDestino:
+        type: string
+      cqPremios:
+        # 0 - Não habilitado, 1 - Habilitado Sinapse, 2 - Habilitado certificação técnica
+        type: integer
+        format: int32
+      tipoProcesso:
+        type: integer
+        format: int64
+
+
+  TokenSensedia:
+    type: object
+    properties:
+      jwt:
+        type: string
+
+  ApoliceConsultaResumidaHistorico:
+    type: object
+    properties:
+      numeroSucursal:
+        type: integer
+        format: int32
+      numeroApolice:
+        type: integer
+        format: int64
+      numeroItem:
+        type: integer
+        format: int32
+      susep:
+        type: string
+      empresa:
+        $ref: '#/definitions/EmpresaDominio'
+      flagSeguroCorretor:
+        description: "identifica se o seguro é do corretor"
+        type: "string"
+      flagTransferencia:
+        description: "identifica se houve transferencia de carteira na apolice"
+        type: boolean
+      descricaoSeguroCorretor:
+        type: "string"
+      inicioVigencia:
+        type: string
+        format: date
+        description: data de inicio da vigência do orcamento de cotação.
+      fimVigencia:
+        type: string
+        format: date
+        description: data de fim da vigência do orcamento de cotação.
+      dataEnquadramento:
+        type: string
+        format: date
+        description: data de enquadramento do Apolice.
+      premiosApoliceHistorico:
+        $ref: '#/definitions/PremiosApoliceHistorico'
+      descontos:
+        type: array
+        items:
+          $ref: '#/definitions/DescontoApolice'
+      coberturasApoliceHistorico:
+        type: array
+        items:
+          $ref: '#/definitions/CoberturasApoliceHistorico'
+      servicosApoliceHistorico:
+        type: array
+        items:
+          $ref: '#/definitions/ServicosApoliceHistorico'
+      classeBonus:
+        type: integer
+        format: int32
+      codigoMarca:
+        type: integer
+        format: int32
+
+  PremiosApoliceHistorico:
+    type: object
+    properties:
+      valorPremioTotalApolice:
+        type: 'number'
+        format: 'double'
+      formaPagamentoEscolhida:
+        $ref: '#/definitions/FormaPagamentoApoliceHistorico'
+      comissaoCorretor:
+        $ref: '#/definitions/ItemCondicaoComercialApolice'
+
+  CoberturasApoliceHistorico:
+    type: object
+    properties:
+      codigoCobertura:
+        type: integer
+        format: int32
+      nomeCobertura:
+        type: "string"
+      tipoCobertura:
+        $ref: "#/definitions/TipoCoberturaEBO"
+      valorImportanciaSegurada:
+        type: number
+        format: double
+      valorPremio:
+        type: number
+        format: double
+      franquiasEscolhidas:
+        type: array
+        items:
+          $ref: '#/definitions/FranquiaCoberturaApoliceHistorico'
+      variacaoOpcionais:
+        type: number
+        format: double
+
+  ServicosApoliceHistorico:
+    type: object
+    required:
+      - codigoPlanoServico
+    properties:
+      codigoPlanoServico:
+        type: number
+      nomePlanoServico:
+        type: "string"
+      flagCobravel:
+        type: boolean
+
+  PlacaVeiculo:
+    type: object
+    properties:
+      placaVeiculo:
+        type: string
+
+  ServicoSinistro:
+    type: object
+    properties:
+      dataInicial:
+        type: string
+        format: date
+      dataFinal:
+        type: string
+        format: date
+
+  ApoliceAnterior:
+    type: object
+    properties:
+      numeroApoliceSendoRenovada:
+        type: integer
+        format: int32
+      codigoSucursalRenovacao:
+        type: integer
+        format: int32
+      codigoMarca:
+        type: integer
+        format: int32
+
+  ApolicesMultiItem:
+    type: object
+    properties:
+      simples:
+        type: array
+        items:
+          $ref: '#/definitions/ApoliceResumida'
+      caminhao:
+        type: array
+        items:
+          $ref: '#/definitions/ApoliceResumida'
+
+  VigenciaCorretorApolice:
+    type: object
+    properties:
+      dataFimVigencia:
+        type: string
+        format: date
+      susep:  
+        type: string
+      quantidades:
+        type: integer
+        format: int32
+      codigoEmpresa:
+        type: integer
+        format: int32
+
+  ParametrosRetorno:
+    type: object
+    properties:
+      dadosCargaEmissao:
+        type: array
+        items:
+          $ref: '#/definitions/DadosCargaEmissao'
+      quantidadeDocumentos:
+        type: integer
+        format: int64
+
+  ParametrosRetornoDetalhado:
+    type: object
+    properties:
+      dadosCargaEmissao:
+        type: array
+        items:
+          $ref: '#/definitions/DadosCargaEmissaoDetalhado'
+      quantidadeDocumentos:
+        type: integer
+        format: int64
+
+  ParametrosRetornoDocumento:
+    type: object
+    properties:
+      dadosCargaEmissao:
+        type: array
+        items:
+          $ref: '#/definitions/DadosCargaEmissaoDocumento'
+      quantidadeDocumentos:
+        type: integer
+        format: int64
+
+  DadosCargaEmissao:
+    type: object
+    properties:
+      fase:
+        type: string
+      status:
+        type: string
+      total:
+        type: integer
+        format: int32
+      empresa:
+        $ref: '#/definitions/EmpresaDominio'
+      marca:
+        $ref: '#/definitions/MarcaDominio'
+
+  DadosCargaEmissaoDetalhado:
+    type: object
+    properties:
+      codigoEmpresa:
+        type: integer
+        format: int32
+      codigoMarca:
+        type: integer
+        format: int32
+      numeroApolice:
+        type: integer
+        format: int64
+      codigoSucursal:
+        type: integer
+        format: int32
+      codigoItem:
+        type: integer
+        format: int32
+      numEndosso:
+        type: integer
+        format: int64
+      numSequenciaEndosso:
+        type: integer
+        format: int32
+      dataFimVigencia:
+        type: string
+        format: date
+      dataEmissaoApolice:
+        type: string
+        format: date
+      dataUltimoEvento:
+        type: string
+        format: date
+      erro:
+        type: string
+
+  DadosCargaEmissaoDocumento:
+    type: object
+    properties:
+      codigoEmpresa:
+        type: integer
+        format: int32
+      numeroApolice:
+        type: integer
+        format: int64
+      codigoSucursal:
+        type: integer
+        format: int32
+      codigoItem:
+        type: integer
+        format: int32
+      numEndosso:
+        type: integer
+        format: int64
+      dataEnventoerro:
+        type: string
+        format: date
+      erro:
+        type: string
+
+  ApoliceVigente:
+    type: object
+    properties:
+      numeroSucursal:
+        type: integer
+        format: int32
+      numeroApolice:
+        type: integer
+        format: int64
+      empresa:
+        type: integer
+        format: int32
+      numeroItem:
+        type: integer
+        format: int32
+      sequencia:
+        type: integer
+        format: int32
+      placa:
+        type: string
+      chassi:
+        type: string
+        
+  AtualizarMeioPagamentoCotacaoApolice:
+    type: object
+    required:
+      - numeroSucursal
+      - numeroApolice
+      - numeroEndosso
+      - empresa
+    description: meio de pagamento utilizado pela cotação
+    properties:
+      numeroSucursal:
+        type: integer
+        format: int32
+      numeroApolice:
+        type: integer
+        format: int64
+      numeroEndosso:
+        type: integer  
+        format: int64
+      empresa:
+        $ref: '#/definitions/EmpresaDominio'
+      tipoMeioPagamento:
+        $ref: '#/definitions/TipoMeioPagamentoDominio'
+      dadosContaCorrente:
+        $ref: '#/definitions/DadosDebitoContaApolice'
+      dadosCartao:
+        $ref: '#/definitions/DadosCartaoApolice'
+      formaPagamentoEscolhida:
+        $ref: '#/definitions/FormaPagamentoApolice'      
+
+  MarcaDominio:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      tipo de finalidade do telefone  
+
+  AtualizarEndereco:
+    type: object
+    properties:
+      numeroSucursal:
+        type: integer
+        format: int32
+      numeroApolice:
+        type: integer
+        format: int64
+      cepPrefixo:
+        description: número do CEP Ex.:Dado um CEP completo 12345-789. o número é 12345
+        type: string
+      cepSufixo:
+        description: numero de complemento do CEP Ex.:Dado um CEP completo 12345-789. o complemento ? 789
+        type: string
+      empresa:
+        $ref: '#/definitions/EmpresaDominio'
+
+  ConsultaVO:
+    type: object
+    required:
+      - token
+      - assinatura
+      - consulta
+      - numeroDeResultados
+    properties:
+      token:
+        type: string
+      assinatura:
+        type: string
+      consulta:
+        type: string
+      numeroDeResultados:
+        type: integer
+        format: int32
+
+  RetornoConsultaVO:
+    type: object
+    properties:
+      detalhes:
+        type: array
+        items:
+          type: string
+
+  RetornoDadosCartao:
+    type: object
+    required:
+      - bandeiraCartao
+      - identificador
+      - dataValidade
+      - diaVencimento
+    properties:
+      bandeiraCartao:
+        $ref: '#/definitions/BandeiraCartao'
+      identificador:
+        type: integer
+        format: int64
+      dataValidade:
+        type: string
+      diaVencimento:
+        type: integer
+        format: int32
+      numeroCartao:
+        type: string
+
+  BairroApoliceMensal:
+    type: object
+    properties:
+      codigoBairro:
+        type: integer
+        format: int32
+      nomeBairro:
+        type: string
+
+  UnidadeFederacaoApoliceMensal:
+    type: object
+    properties:
+      codigoUnidadeFederacao:
+        type: string
+        minLength: 1
+        maxLength: 2
+      nomeUnidadeFederacao:
+        type: string
+      ultimaAtualizacaoLinha:
+        type: string
+
+  LocalidadeMensal:
+    type: "object"
+    properties:
+      codigoLocalidade:
+        type: integer
+        format: int64
+      nomeLocalidade:
+        type: string
+      nomeAbreviadoLocalidade:
+        type: string
+      tipoLocalidade:
+        $ref: '#/definitions/DominioApolice'
+
+  EnderecoApoliceMensal:
+    type: "object"
+    required:
+      - codigoLogradouro
+    properties:
+      codigoLogradouro:
+        description: código do logradouro (obtido via integração com guia postal)
+        type: "integer"
+        format: "int64"
+      numeroCep:
+        description: número do CEP Ex.:Dado um CEP completo 12345-789. o número é 12345
+        type: "string"
+      numeroCepComplemento:
+        description: numero de complemento do CEP Ex.:Dado um CEP completo 12345-789. o complemento ? 789
+        type: string
+      tipoFinalidade:
+        $ref: '#/definitions/TipoFinalidadeEndereco'
+      tipoLogradouro:
+        $ref: "#/definitions/TipoLogradouro"
+      logradouro:
+        description: descrição do logradouro (obtido via integração com guia postal) Ex.:Paulista
+        type: string
+      numeroImovelLogradouro:
+        type: "string"
+      descricaoComplementoEndereco:
+        type: "string"
+      bairro:
+        $ref: "#/definitions/BairroApoliceMensal"
+      localidade:
+        description: "Objeto que identifica a cidade do endereco"
+        $ref: '#/definitions/LocalidadeMensal'        
+      unidadeFederacao:
+        $ref: "#/definitions/UnidadeFederacaoApoliceMensal"
+      flagImovelSemNumero:
+        description: identifica que o imóvel não tem número
+        type: "boolean"
+
+  DocumentoApoliceMensal:
+    description: todos os campos da hierarquia de documentos deverão ser discriminados
+    type: object
+    properties:
+      tipoIdentificacao:
+        $ref: '#/definitions/TipoIdentificacao'
+      numeroDocumento:
+        description: 'número do documento sem máscara de acordo com o tipo de identificação. Zeros a esquerda devem ser discriminados. Ex.:Cpf:01234567890, Cnpj:12345678000101, Rg:XX12345678'
+        type: string
+      dataExpedicao:
+        type: string
+        format: date
+      dataVencimento:
+        type: string
+        format: date
+      orgaoEmissor:
+        $ref: '#/definitions/OrgaoEmissor'
+
+  TipoLinhaTelefone:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      tipo de linha do telefone        
+
+  TelefoneApoliceMensal:
+    type: object
+    required:
+      - tipoFinalidade
+      - codigo
+    properties:
+      codigo:
+        type: integer
+        format: int32
+      tipoLinha:
+        $ref: '#/definitions/TipoLinhaTelefone'
+      tipoFinalidade:
+        $ref: '#/definitions/TipoFinalidadeTelefone'
+      ddi:
+        type: integer
+        format: int32
+      ddd:
+        type: integer
+        format: int32
+      numero:
+        type: integer
+        format: int64
+      ramal:
+        type: integer
+        format: int32
+
+  TipoFinalidadeEnderecoEletronico:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      tipo de finalidade do endereço eletronico
+
+  StatusMensal:
+    allOf:
+      - $ref: '#/definitions/DominioApolice'
+    description: |
+      status da apolice APA
+
+  EnderecoEletronicoApoliceMensal:
+    type: object
+    properties:
+      codigo:
+        type: integer
+        format: int32
+      tipoFinalidade:
+        $ref: '#/definitions/TipoFinalidadeEnderecoEletronico'
+      texto:
+        type: string
+        format: email
+
+  CorretorApoliceMensal:
+    type: object
+    required:
+      - susep
+    properties:
+      susep:
+        type: string
+      flagCorretorLider:
+        type: boolean
+      percentualParticipacaoCorretor:
+        type: number
+        format: float
+
+  ModeloVeiculoMensalType:
+    description: "Objeto que define o modelo do veículo, por exmeplo GOL, CIVIC, CITY"
+    type: "object"
+    properties:
+      codigoModelo:
+        description: "numero que representa o código do modelo do veículo na plataforma do auto 2.0"
+        type: integer
+        format: int64
+      modeloLegado:
+        $ref: "#/definitions/ModeloVeiculoLegado"
+      marca:
+        description: "Define a marca do veículo, Honda, Chevrolet entre outras. As informações de marca será disponibilizada por serviço no corporativo"
+        $ref: "#/definitions/DominioApolice"
+      tipoCarroceria:
+        description: "define o tipo de carroceria do veículo, sendo (hatch, sedan)"
+        $ref: "#/definitions/DominioMensalType"
+      especie:
+        description: "define a espécie do veículo, sendo Automóvel, Bicicleta, Moto entre outros"
+        $ref: "#/definitions/DominioMensalType"
+
+  FranquiaMensalType:
+    description: "Objeto que define o valor de franquias para as peças do veículo conforme o tipo franquia."
+    type: "object"
+    properties:
+      codigoFranquia:
+        description: ""
+        type: "integer"
+        format: "int64"
+      tipoFranquia:
+        description: "define o tipo de franquia do veículo, por exemplo, Casco ou Vidros"
+        $ref: "#/definitions/DominioMensalType"
+      percentualFranquia:
+        description: ""
+        type: "number"
+        format: "double"
+      valorFranquia:
+        description: ""
+        type: "number"
+        format: "double"
+      valorFranquiaMinima:
+        description: ""
+        type: "number"
+        format: "double"     
+
+  DominioMensalType:
+    description: "domínios externos ao modelo de cotação (Veículo)"
+    type: "object"
+    properties:
+      codigoConfiguracao:
+        description: "código de configuração da tabela de domínio"
+        type: "integer"
+        format: "int32"
+      codigo:
+        description: "código do valor do domínio"
+        type: "integer"
+        format: "int32"
+      nomeDominio:
+        description: ""
+        type: "string"
+      nomeAbreviadoDominio:
+        description: ""
+        type: "string"
+      flagSituacao:
+        description: "Determina se o grupo de linha está ou não ativa"
+        type: "string"
+
+  RelVersaoCodigoReferenciaMensal:
+    #representa o registro de associacao entre a versão de veículo e o(s) código(s) das tabelas de referencia (Fipe/Molicar/etc)
+    type: object
+    description: "representa a associação entre o código Porto e o código de referencia de acordo com sua tabela de referencia"
+    properties:
+      numeroSequencialAssociacao:
+        description: "numero sequencial controlado pelo banco que representa a relacao entre código porto e tabela+codigo de referencia"
+        type: integer
+        format: int64
+      tipoTabelaReferencia:
+        $ref: "#/definitions/DominioMensalType"
+      codigoReferencia:
+        description: "código associado à tabela de referência correspondente (código Fipe, código Molicar, etc)"
+        type: integer
+        format: int64
+      codigoVersao:
+        description: "numero sequencial que representa o código Porto na plataforma do auto 2.0 (relacionamento bidirecional)"
+        type: integer
+        format: int64
+
+
+  VersaoVeiculoMensalType:
+    description: "define as versões de um veículo, por meio das possíveis chaves, como ano modelo, tipo combustível dentre outro"
+    type: "object"
+    properties:
+      codigoVersao:
+        description: "numero sequencial que representa o código Porto na plataforma do auto 2.0"
+        type: integer
+        format: int64
+      versaoLegado:
+        $ref: "#/definitions/VersaoVeiculoLegado"
+      relVersaoCodigosReferencia:
+        description: "representação da associação entre o código de versão do Auto 2.0 (código porto novo) e os códigos das tabelas de referencia"
+        type: array
+        items:
+          $ref: "#/definitions/RelVersaoCodigoReferenciaMensal"
+      codigoFipe:
+        description: ""
+        type: "integer"
+        format: "int64"
+      quantidadePortas:
+        type: "integer"
+        format: "int32"
+      quantidadePotencia:
+        description: ""
+        type: "integer"
+        format: "int32"
+      quantidadeCilindrada:
+        description: ""
+        type: "integer"
+        format: "int32"
+      quantidadePeso:
+        description: ""
+        type: "integer"
+        format: "int32"
+      quantidadeComprimento:
+        description: ""
+        type: "integer"
+        format: "int32"
+      quantidadeLargura:
+        description: ""
+        type: "integer"
+        format: "int32"
+      quantidadePassageiros:
+        description: ""
+        type: "integer"
+        format: "int32"
+      quantidadeAltura:
+        description: ""
+        type: "integer"
+        format: "int32"
+      quantidadeValvula:
+        description: ""
+        type: "integer"
+        format: "int32"
+      flagVeiculoPCD:
+        type: "string"
+      flagVeiculoBlindado:
+        type: "string"
+      codigoGrupoLinha:
+        description: ""
+        type: "integer"
+        format: "int32 "
+      codigoLinha:
+        description: ""
+        type: "integer"
+        format: "int32 "
+      codigoLinhaLegado:
+        type: integer
+        format: int32
+        description: "codigo de identificao da linha do veiculo. Esta informacao sera obtida atraves carga do CADAUTO do legado (informix), e se faz necessaria para manter a associacao entre as linhas da nova plataforma com as linhas do legado."
+      modelo:
+        $ref: "#/definitions/ModeloVeiculoMensalType"
+      tipoCombustivel:
+        description: "define o tipo de combustível do automóvel, por exemplo gasolina, alcool"
+        $ref: "#/definitions/DominioMensalType"
+      tipoCambio:
+        description: "Tipo do câmbio utilizado pelo veículo, sendo Manual, Automático entre outros"
+        $ref: "#/definitions/DominioMensalType"
+      categoriaTarifariaOriginal:
+        description: "categoria tarifária a qual identifica um veiculo, por exmeplo catagoria 10 - GOL 1.0 Gasolina Manual"
+        $ref: "#/definitions/DominioMensalType"
+      procedencia:
+        description: "País de origem veículo, sendo (Nacional ou Importado)"
+        $ref: "#/definitions/DominioMensalType"
+      tipoAlimentacaoCombustivel:
+        description: "Tipo de alimentacao, por exemplo, injeção eletrônica"
+        $ref: "#/definitions/DominioMensalType"
+      estilo:
+        description: "O estilo de veículo informa se o veículo é esportivo, popular, off Road"
+        $ref: "#/definitions/DominioMensalType"
+      grupoTarifario:
+        description: "Domínio de grupo tárifário, por exemplo: Veículos Recém Lançados"
+        $ref: "#/definitions/DominioMensalType"
+      franquia:
+        type: 'array'
+        items:
+          $ref: '#/definitions/FranquiaMensalType'
+
+  CadastroVeiculoMensalType:
+    description: |
+      description: "Objeto de composição do valor do veículo conforme a tabela FIPE"
+    type: "object"
+    properties:
+      codigoVersao:
+        description: ""
+        type: "integer"
+        format: "int64"
+      anoModelo:
+        description: ""
+        type: "integer"
+        format: "int32"
+      flagZeroKm:
+        description: "flag que identifica se o veículo é 0km"
+        type: "string"
+      valorMercado:
+        type: "number"
+        format: "double"
+      anoTarifa:
+        description: ""
+        type: "integer"
+        format: "int32"
+      mesTarifa:
+        description: ""
+        type: "integer"
+        format: "int32"
+      versaoVeiculo:
+        $ref: "#/definitions/VersaoVeiculoMensalType"
+
+  VeiculoApoliceMensal:
+    type: object
+    properties:
+      placa:
+        type: string
+      cepPernoite:
+        type: string
+      anoFabricacaoVeiculo:
+        type: integer
+        format: int32
+      categoriaTarifaria:
+        description: categoria reenquadrada a partir do tipo de uso
+        type: integer
+        format: int32
+      tipoKitGas:
+        $ref: '#/definitions/TipoKitGas'
+      tipoUso:
+        $ref: '#/definitions/TipoUso'
+      cadastroVeiculo:
+        $ref: '#/definitions/CadastroVeiculoMensalType'
+      valorBase:
+        description: valor monetário do veículo quando não for possivel obter sua cotação do cadastro de veículos.
+        type: number
+        format: double
+      financiado:
+        $ref: '#/definitions/Financiado'
+      chassiRemarcado:
+        $ref: '#/definitions/ChassiRemarcado'
+      blindagem:
+        $ref: '#/definitions/DominioApolice'
+        description: "1 - de fabrica, 2 - não possui, 3 - adpatado/instalado"
+      tipoIsencao:
+        $ref: '#/definitions/TipoIsencao'
+      flagVeiculoPcd:
+        description: "Determina se veiculo é habilitado por pessoa Deficiente/Necessidade especial"
+        type: boolean
+      chassi:
+        type: string
+      renavam:
+        type: string
+      enderecos:
+        type: array
+        items:
+          $ref: '#/definitions/EnderecoApoliceMensal'
+      modalidade:
+        $ref: '#/definitions/TipoModalidadeCasco'
+      valorVariado:
+        type: "number"
+        format: "double"
+      variacaoOpcionais:
+        description: percentual de variação em relação ao valor base do veículo quando houve opcionais no veículo.
+        type: number
+        format: double
+      classeLocalizacao:
+        type: integer
+        format: int32
+
+  PessoaCondutorApoliceMensal:
+    type: object
+    properties:
+      codigo:
+        type: integer
+        format: int32
+      tipoPessoa:
+        $ref: '#/definitions/TipoPessoa'
+      estadoCivil:
+        $ref: '#/definitions/EstadoCivil'
+      sexo:
+        $ref: '#/definitions/Sexo'
+      dataNascimento:
+        type: string
+        format: date
+      nomeLegalPessoa:
+        type: string
+        maxLength: 100
+      nomeSocialPessoa:
+        type: string
+        maxLength: 100
+      enderecos:
+        type: array
+        items:
+          $ref: '#/definitions/EnderecoApoliceMensal'
+      documentos:
+        type: array
+        items:
+          $ref: '#/definitions/DocumentoApoliceMensal'
+      telefones:
+        type: array
+        items:
+          $ref: '#/definitions/TelefoneApoliceMensal'
+      enderecosEletronicos:
+        type: array
+        items:
+          $ref: '#/definitions/EnderecoEletronicoApoliceMensal'
+
+  CondutorApoliceMensal:
+    type: object
+    properties:
+      pessoa:
+        $ref: '#/definitions/PessoaCondutorApoliceMensal'
+      flagPrincipal:
+        type: boolean
+
+  FranquiaCoberturaApoliceMensal:
+    type: object
+    required:
+      - codigoFranquia
+    properties:
+      codigoFranquia:
+        type: integer
+        format: int32
+
+  AcessorioApoliceMensal:
+    type: object
+    required:
+      - codigoAcessorio
+    properties:
+      codigoAcessorio:
+        type: integer
+        format: int64
+      valorImportanciaSegurada:
+        description: "valor da importancia segurada informada pelo corretor."
+        type: number
+        format: double
+        default: 0.0
+      valorFranquia:
+        description: "valor da franquia do acessorio contratado atribuido pelo sinapse"
+        type: "number"
+        format: "double"
+        default: 0.0
+      valorPremio:
+        description: "valor do prêmio do acessorio contratado atribuido pelo sinapse"
+        type: "number"
+        format: "double"
+        default: 0.0
+
+  CoberturaCotacaoApoliceMensal:
+    type: object
+    properties:
+      codigoCobertura:
+        type: number
+      valorImportanciaSegurada:
+        type: number
+        format: double
+        default: 0.0
+      valorPremioAnual:
+        description: valor do prêmio anualizado, sem os descontos comerciais. Deve ser persistido para fins de Apolices e renovações.
+        type: number
+        format: double
+        default: 0.0
+      valorPremioFinal:
+        type: number
+        format: double
+      valorPremio:
+        description: valor do prêmio da cobertura.
+        type: number
+        format: double
+        default: 0.0
+      valorFranquia:
+        description: "valor da franquia contratado atribuido pelo sinapse"
+        type: "number"
+        format: "double"
+        default: 0.0
+      questoes:
+        type: array
+        items:
+          $ref: '#/definitions/QuestaoApoliceMensal'
+      franquiasEscolhidas:
+        type: array
+        items:
+          $ref: '#/definitions/FranquiaCoberturaApoliceMensal'
+      valorPremioCartao:
+        type: number
+        format: double
+        default: 0.0
+      valorPremioOfertaCartao:  
+        type: number
+        format: double
+        default: 0.0
+      valorPremioAnualCartao:
+        type: number
+        format: double
+        default: 0.0
+      valorPremioAnualOfertaCartao:
+        type: number
+        format: double
+        default: 0.0
+      acessoriosContratados:
+        type: array
+        items:
+          $ref: '#/definitions/AcessorioApoliceMensal'
+
+  RespostaQuestionarioApoliceMensal:
+    type: object
+    required:
+      - numeroSequenciaResposta
+    properties:
+      numeroSequenciaResposta:
+        type: integer
+        format: int64
+      resposta:
+        type: string
+
+  DominioRespostaMensal:    
+    type: object
+    required:
+      - codigo
+    properties:
+      codigo:
+        type: integer
+        format: int64
+      valor:
+        type: string
+
+  QuestaoApoliceMensal:
+    type: object
+    properties:
+      codigo:
+        type: number
+      dominioResposta:
+        type: array
+        items:
+          $ref: '#/definitions/DominioRespostaMensal'
+      respostas:
+        type: array
+        items:
+          $ref: '#/definitions/RespostaQuestionarioApoliceMensal'
+
+  ServicoApoliceMensal:
+    type: object
+    required:
+      - codigoPlanoServico
+    properties:
+      codigoPlanoServico:
+        type: number
+      valorPremioAnual:
+        description: valor do prêmio anualizado, sem os descontos comerciais. Usado para fins de Apolices e renovações.
+        type: number
+        format: double
+        default: 0.0
+      valorPremio:
+        description: valor do prêmio do serviço.
+        type: number
+        format: double
+        default: 0.0
+      valorPremioCartao:
+        description: valor do prêmio do serviço.
+        type: number
+        format: double
+        default: 0.0
+      valorPremioOfertaCartao:
+        description: valor do prêmio do serviço.
+        type: number
+        format: double
+        default: 0.0
+      valorPremioAnualCartao:
+        description: valor do prêmio do serviço.
+        type: number
+        format: double
+        default: 0.0
+      valorPremioAnualOfertaCartao:
+        description: valor do prêmio do serviço.
+        type: number
+        format: double
+        default: 0.0
+      questoes:
+        type: "array"
+        items:
+          $ref: "#/definitions/QuestaoApoliceMensal"
+
+  BeneficioMensal:
+    type: object
+    properties:
+      codigoBeneficio:
+        type: string
+
+  DescontoApoliceMensal:
+    type: object
+    required:
+      - codigoDesconto
+    description: descontos e agravos da cotaçao
+    properties:
+      codigoDesconto:
+        description: "código do desconto aplicado"
+        type: "integer"
+        format: "int32"
+      tipoDesconto:
+        $ref: '#/definitions/TipoDesconto'
+      percentual:
+        description: número de percentual do desconto
+        type: number
+        format: double
+      valor:
+        description: valor do desconto.
+        type: number
+        format: double
+        default: 0.0
+
+  ItemMensal:
+    type: object
+    required:
+      - numeroItem
+    properties:
+      numeroItem:
+        type: integer
+        format: int64
+      veiculo:
+        $ref: '#/definitions/VeiculoApoliceMensal'
+      condutores:
+        type: array
+        items:
+          $ref: '#/definitions/CondutorApoliceMensal'
+      coberturas:
+        type: array
+        items:
+          $ref: '#/definitions/CoberturaCotacaoApoliceMensal'
+      servicos:
+        type: array
+        items:
+          $ref: '#/definitions/ServicoApoliceMensal'
+      beneficios:
+        type: array
+        items:
+          $ref: '#/definitions/BeneficioMensal'
+      descontos:
+        type: array
+        items:
+          $ref: '#/definitions/DescontoApoliceMensal'
+
+  PessoaMensal:
+    type: object
+    properties:
+      pessoa:
+        type: object
+        properties:
+          codigo:
+            type: integer
+            format: int64
+          tipoPessoa:
+            $ref: '#/definitions/TipoPessoa'
+          estadoCivil:
+            $ref: '#/definitions/EstadoCivil'
+          sexo:
+            $ref: '#/definitions/Sexo'
+          dataNascimento: 
+            type: string
+            format: date
+          nomeLegalPessoa:
+            type: string
+          nomeSocialPessoa:
+            type: string
+          enderecos:
+            type: array
+            items:
+              $ref: '#/definitions/EnderecoApoliceMensal'
+          documentos:
+            type: array
+            items:
+              $ref: '#/definitions/DocumentoApoliceMensal'
+          telefones:
+            type: array
+            items:
+              $ref: '#/definitions/TelefoneApoliceMensal'
+          enderecosEletronicos:
+            type: array
+            items:
+              $ref: '#/definitions/EnderecoEletronicoApoliceMensal'
+      classeBonus:
+        type: integer
+        format: int32
+
+  ApoliceDetalhadaMensal:
+    type: object
+    properties:
+      numeroSucursal: 
+        type: integer
+        format: int32
+      numeroApolice: 
+        type: integer
+        format: int64
+      numeroRecorrencia: 
+        type: integer
+        format: int32
+      segmentos:
+        type: object
+        properties:
+          codigoSegmento: 
+            type: string
+          empresa: 
+            type: string
+          marca: 
+            type: string
+      segurado:
+        $ref: '#/definitions/PessoaMensal'
+      corretores:
+        type: array
+        items:
+          $ref: '#/definitions/CorretorApoliceMensal'      
+      tipoSeguro:
+        $ref: '#/definitions/TipoSeguroDominio'
+      inicioVigencia: 
+        type: string
+        format: date
+      fimVigencia: 
+        type: string
+        format: date
+      dataEnquadramento: 
+        type: string
+        format: date-time
+      tipoVigencia:
+        $ref: '#/definitions/TipoVigenciaDominio'
+      status:
+        $ref: '#/definitions/StatusMensal'
+      itens:
+        type: array
+        items:
+          $ref: '#/definitions/ItemMensal'    
+  QtdeApolicesMensal:
+    type: object
+    properties:
+      quantidade:
+        type: integer
+        format: int32          
+
+  ApoliceDetalhada:
+    type: object
+    properties:
+      apoliceDetalhada:
+        $ref: '#/definitions/ApoliceDetalhadaMensal'
+        
+  BaseUnificadaStatus:
+    type: object
+    required:
+      - codigoSucursal
+      - numeroApolice
+      - numeroSequenciaEndosso
+      - codigoStatus
+    properties:
+      codigoSucursal:
+        type: integer
+        format: int32
+        minimum: 0
+        maximum: 999999
+      numeroApolice:
+        type: integer
+        format: int64
+        example: '99999999'
+        description: 'Numero da Apolice.'
+      numeroSequenciaEndosso:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 999
+      codigoStatus:
+        type: integer
+        format: int32
+        minimum: 0
+        maximum: 999999
+
+  ApoliceEtapaMensal:
+    type: object
+    required:
+      - id
+      - codEtapa
+      - codStatusEtapa
+      - datInicioEtapa
+    properties:
+      id:
+        $ref: "#/definitions/ApoliceEtapaMensalId"
+      codEtapa:
+        type: integer
+        description: "Código da etapa"
+      codStatusEtapa:
+        type: integer
+        description: "Código do status da etapa"
+      datInicioEtapa:
+        type: string
+        format: date-time
+        description: "Data de início da etapa"
+      datFimEtapa:
+        type: string
+        format: date-time
+        description: "Data de término da etapa"
+      desErro:
+        type: string
+        description: "Descrição do erro, caso exista"
+
+  ApoliceEtapaMensalId:
+    type: object
+    required:
+      - codIdentificacaoProcessamentoRecorrenciaApoliceEtapa
+      - codIdentificacaoProcessamentoRecorrenciaApolice
+      - codIdentificacaoProcessamentoRecorrencia
+      - codSucursal
+      - codApolice
+    properties:
+      codIdentificacaoProcessamentoRecorrenciaApoliceEtapa:
+        type: integer
+        description: "Código de identificação do processamento da etapa"
+      codIdentificacaoProcessamentoRecorrenciaApolice:
+        type: integer
+        description: "Código de identificação do processamento da apólice"
+      codIdentificacaoProcessamentoRecorrencia:
+        type: integer
+        description: "Código de identificação do processamento da recorrência"
+      codSucursal:
+        type: integer
+        description: "Código da sucursal"
+      codApolice:
+        type: integer
+        description: "Código da apólice"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /portoseguro-097/myapp/1.0.0
